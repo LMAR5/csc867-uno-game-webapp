@@ -1,0 +1,11 @@
+# misc
+.DS_Store
+
+# Dependency directory
+/node_modules
+
+# Editor
+.vscode
+
+# Environment variables
+.env

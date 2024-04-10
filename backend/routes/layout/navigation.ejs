@@ -1,0 +1,43 @@
+<nav class="bg-gray-800">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <div class="flex items-center">
+        <!-- Start logo segment -->
+        <div class="flex-shrink-0">
+          <img
+            class="h-8 w-8"
+            src="/images/favicons/android-chrome-192x192.png"
+            alt="Jrob's War Game"
+          />
+        </div>
+        <!-- End logo segment -->
+        <!-- Start desktop main menu segment -->
+        <div class="hidden md:block">
+          <div class="ml-10 flex items-baseline space-x-4">
+            <% menuItems.forEach(({ url, name, current }) => { %>
+              <!-- prettier-ignore -->
+              <a href="<%= url %>" class="menu-item<%= current ? " menu-item-selected" : "" %>"><%= name %></a>
+            <% }); %>
+          </div>
+        </div>
+        <!-- End desktop main menu segment -->
+      </div>
+      <!-- Start desktop secondary menu segment; make sure we have an authenticated user -->
+      <% if(locals.user) { %>
+      <div class="hidden md:block">
+        <div class="ml-4 flex items-center md:ml-6">
+          <a href="/auth/logout" class="menu-item mr-4">Sign out</a>
+          <img class="h-8 w-8 rounded-full" src="https://gravatar.com/avatar/<%= user.gravatar %>" alt="<%= user.email %>">
+      </div>
+      <% } %>
+      <!-- End desktop secondary menu segment -->
+    </div>
+  </div>
+</nav>
+<% if(locals.suppressHeader === undefined) { %>
+<header class="bg-white shadow">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900"><%= menuItems.find(item => item.current).name %></h1>
+  </div>
+</header>
+<% } %>
