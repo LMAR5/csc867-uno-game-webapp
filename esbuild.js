@@ -14,8 +14,8 @@ if (fs.existsSync(OUT_PATH)) {
 
 const CONFIG = {
   entryPoints: [
-    path.join(FRONTEND_PATH, "index.ts"),
-    path.join(FRONTEND_PATH, "games", "index.ts"),
+    path.join(FRONTEND_PATH, "index.js"),
+    path.join(FRONTEND_PATH, "games", "index.js"),
   ],
   bundle: true,
   outdir: path.join(OUT_PATH),
