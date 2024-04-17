@@ -3,12 +3,539 @@
 Team: I
 Game: Uno
 
+## Socket setup & lobby dynamic behavior
+
+<details>
+  <summary>Updating available games</summary>
+
+### Updating available games
+
+Now that we have sockets set up, we can start to add more dynamic behavior to our application. In this section, we will update the list of available games whenever a new game is created, or when a game is no longer available to join. A new message handler will be added to the frontend that will receive a new message (defined in our [`backend/sockets/constants.js`](/backend/sockets/constants.js) file), and update the lobby.
+
+```ts
+// Adding new message constants in backend/sockets/constants.js
+export const CHAT_MESSAGE = "chat:message";
+export const GAME_CREATED = "game:created";
+export const GAME_REMOVED = "game:removed";
+```
+
+```ts
+// Game created message handler in frontend/messages/game-created.ts
+import { Socket } from "socket.io-client";
+
+import { GAME_CREATED } from "../../backend/sockets/constants";
+
+export default function handle(socket: Socket) {
+  const gamesList = document.querySelector<HTMLElement>("#available-games-list");
+  const availableGameTemplate = document.querySelector<HTMLTemplateElement>(
+    "#available-game-template",
+  );
+
+  socket.on(
+    GAME_CREATED,
+    ({
+      gameId,
+      creatorEmail,
+      creatorGravatar,
+      description,
+    }: {
+      gameId: number;
+      creatorEmail: string;
+      creatorGravatar: string;
+      description: string;
+    }) => {
+      if (gamesList === null || availableGameTemplate === null) {
+        console.error("Games list or template not found");
+        return;
+      }
+
+      const newGameElement = availableGameTemplate.content.cloneNode(true) as HTMLElement;
+      const liElement = newGameElement.querySelector<HTMLElement>("li");
+      console.log(liElement);
+      liElement!.dataset.gameId = gameId.toString();
+
+      const img = newGameElement.querySelector<HTMLImageElement>("img");
+      img!.src = `https://gravatar.com/avatar/${creatorGravatar}`;
+      img!.alt = `${creatorEmail.substring(0, creatorEmail.indexOf("@"))}'s gravatar`;
+
+      const descriptionElement = newGameElement.querySelector<HTMLElement>(".game-description");
+      descriptionElement!.textContent = description;
+
+      const joinForm = newGameElement.querySelector<HTMLFormElement>("form");
+      joinForm!.action = `/games/join/${gameId}`;
+
+      gamesList.appendChild(newGameElement);
+    },
+  );
+}
+```
+
+```ts
+// Game removed message handler in frontend/messages/game-removed.ts
+import { Socket } from "socket.io-client";
+
+import { GAME_REMOVED } from "../../backend/sockets/constants";
+
+const gamesList = document.querySelector<HTMLElement>("#available-games-list");
+
+export default function handle(socket: Socket) {
+  socket.on(GAME_REMOVED, ({ gameId }: { gameId: number }) => {
+    const gameElement = document.querySelector<HTMLElement>(`[data-game-id="${gameId}"]`);
+
+    if (gamesList === null || gameElement === null) {
+      console.error("Games list or game element not found");
+      return;
+    }
+
+    gamesList.removeChild(gameElement);
+  });
+}
+```
+
+```ts
+// Adding the new handlers into our handler array in frontend/messages/index.ts
+import { default as chatMessageHandler } from "./chat-message";
+import { default as gameCreatedHandler } from "./game-created";
+import { default as gameRemovedHandler } from "./game-removed";
+
+export default [chatMessageHandler, gameRemovedHandler, gameCreatedHandler];
+```
+
+On the backend, we need to identifiy the appropriate place to send these events to the client. We have a route for creating a game, so we can emit a message to all clients whenever a game is created. Games should be removed whenever the number of players requirement for the game has been met - this happens in the route that handles joining games (both routes are defined in [`backend/routes/games/index.js`](/backend/routes/games/index.js), relevant routes included here for reference):
+
+```ts
+router.post("/create", async (request, response) => {
+  const { id: creatorId, gravatar: creatorGravatar, email: creatorEmail } = request.session.user;
+  const { description } = request.body;
+
+  try {
+    const io = request.app.get("io");
+    const { id, description: finalDescription } = await Games.create(creatorId, description);
+
+    io.emit(GAME_CREATED, {
+      gameId: id,
+      description: finalDescription,
+      creatorGravatar,
+      creatorEmail,
+    });
+
+    response.redirect(`/games/${id}`);
+  } catch (error) {
+    // If we were nice we would provide the user with an error message
+    response.redirect("/lobby");
+  }
+});
+
+router.post("/join/:id", async (request, response) => {
+  const { id: gameId } = request.params;
+  const { id: userId } = request.session.user;
+
+  try {
+    const io = request.app.get("io");
+    await Games.join(gameId, userId);
+
+    io.emit(GAME_REMOVED, { gameId });
+
+    response.redirect(`/games/${gameId}`);
+  } catch (error) {
+    console.log(error);
+    response.redirect("/lobby");
+  }
+});
+```
+
+</details>
+
+<details>
+  <summary>Sending messages from server to client (setting up lobby chat)</summary>
+
+### [Sending messages from server to client (setting up lobby chat)](https://github.com/sfsu-csc-667-spring-2024-roberts/jrobs-term-project/commit/1b42f929bd8934979b483f7ca4a4316dde695a9a)
+
+This is a rather larger section because we are beginning to tie together a number of different application elements that we have created in isolation.
+
+I'm going to start by getting some organization out of the way. To keep front end code organized, I will implement all of my socket message handling in individual functions in the `frontend/messages` directory. All of the event handling logic for the front end (like form submission or button click handlers) will be implemented as individual functions in the `frontend/event-handlers` directory. In both cases, a function will be returned that can be invoked from the front end index file to set up the respective logic. Note that a manifest file is provided in each directory that will export an array of functions (we will come back to the content of these files shortly):
+
+```
+frontend
+├── css
+│   └── main.css
+├── event-handlers
+│   ├── chat-message-form-submission.ts
+│   └── index.ts
+├── index.ts
+└── messages
+    ├── chat-message.ts
+    └── index.ts
+```
+
+For the backend organization, I will add an `api` directory to `backend/routes` where I can put some generic api calls I need in the front end. In `backend/routes/api` and `backend/routes/chat`, I will add the index files for the routes, and add them to the manifest file [`backend/routes/index.js`](/backend/routes/index.js).
+
+```js
+backend
+├── routes
+│   ├── api
+│   │   └── index.js
+│   ├── chat
+│   │   ├── chat-message.ejs
+│   │   ├── chat.ejs
+│   │   └── index.js
+```
+
+My api will, for now, implement a single route that allows the client to get the room id that should be used for the chat room - this allows the client to send a chat message to the correct room:
+
+```js
+import express from "express";
+
+const router = express.Router();
+
+router.post("/room-id", async (request, response) => {
+  const { referer } = request.headers;
+
+  if (referer.includes("lobby")) {
+    response.json({ roomId: 0 });
+  } else {
+    const idIndex = referer.lastIndexOf("/");
+    const roomId = parseInt(referer.slice(idIndex + 1));
+
+    response.json({ roomId });
+  }
+});
+
+export default router;
+```
+
+The chat router will implement the route to receive and then broadcast a message (note that I added a [`backend/sockets/constants.js`](/backend/sockets/constants.js) to be able to share message names between the front end and back end). Note that we would probably want to implement some sort of authorization here to ensure that users are only sending messages to channels they belong to (i.e. either 0 for lobby, or that the user is associated with the game id):
+
+```js
+import express from "express";
+
+import { CHAT_MESSAGE } from "../../sockets/constants.js";
+
+const router = express.Router();
+
+router.post("/:id", async (request, response) => {
+  const { id: roomId } = request.params;
+  const { message } = request.body;
+  const { email: senderEmail, gravatar } = request.session.user;
+
+  request.app
+    .get("io")
+    .emit(CHAT_MESSAGE, { roomId, message, senderEmail, gravatar, timestamp: new Date() });
+
+  response.status(200).send();
+});
+
+export default router;
+```
+
+```js
+// backend/sockets/constants.js
+export const CHAT_MESSAGE = "chat:message";
+```
+
+```js
+// Added to backend/routes/index.js manifest file
+export { default as chat } from "./chat/index.js";
+export { default as api } from "./api/index.js";
+```
+
+```js
+// Added after existing route setup in backend/server.js
+app.use("/api", routes.api);
+app.use("/chat", routes.chat);
+```
+
+```html
+<!-- Removed static content from chat.ejs and styled a little more, adding in the template element from chat-message.ejs -->
+<div class="flex flex-col h-[calc(100vh-100px)]">
+  <%- include('chat-message.ejs') %>
+  <ul role="list" class="flex flex-col flex-1 overflow-y-scroll" id="chat-message-area"></ul>
+
+  <!-- New comment form -->
+  <div class="mt-6 flex gap-x-3 justify-self-end">
+    <img
+      src="https://gravatar.com/avatar/<%= user.gravatar %>"
+      alt="<%= user.email %>"
+      class="h-6 w-6 flex-none rounded-full bg-gray-50"
+    />
+    <form method="post" id="chat-message-form" class="relative flex-auto">
+      <div
+        class="overflow-hidden rounded-lg pb-12 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600"
+      >
+        <label for="comment" class="sr-only">Add your comment</label>
+        <input
+          name="message"
+          id="message"
+          class="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+          placeholder="Add your message..."
+        />
+      </div>
+
+      <div class="absolute inset-x-0 bottom-0 flex flex-row-reverse py-2 pl-3 pr-2 w-full">
+        <button
+          type="submit"
+          class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        >
+          Send
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+```
+
+```html
+<!-- Template for chat messages -->
+<template id="chat-message-template">
+  <li class="relative flex gap-x-4 pb-6">
+    <div class="absolute left-0 top-0 flex w-6 z-0 justify-center bottom-0">
+      <div class="w-px bg-gray-200"></div>
+    </div>
+    <img src="REPLACE" alt="REPLACE" class="relative h-6 w-6 flex-none rounded-full bg-gray-50" />
+    <div class="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
+      <div class="flex justify-between gap-x-4">
+        <div class="py-0.5 text-xs leading-5 text-gray-500">
+          <span class="font-medium text-gray-900 chat-message-username">REPLACE</span>
+          said
+        </div>
+        <time datetime="REPLACE" class="flex-none py-0.5 text-xs leading-5 text-gray-500"></time>
+      </div>
+      <p class="text-sm leading-6 text-gray-500 chat-message-body">REPLACE</p>
+    </div>
+  </li>
+</template>
+```
+
+The client side socket instance will be configured to listen for specific messages, and to execute some code when that action is received.
+
+First, the event handler for the form submission in [`frontend/event-handlers/chat-message-form-submission.ts`](/frontend/event-handlers/chat-message-form-submission.ts). Pay attention to the fact that _we do not care what the response from the server is_ (well, so long as its a success) - the server will be responsible for ensuring that the message gets sent to the correct clients; this is not the job of the client!
+
+```ts
+const form = document.querySelector("form#chat-message-form") as HTMLFormElement;
+
+export const handle = () => {
+  if (form) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const elements = (event.target as HTMLFormElement).elements;
+      const input = elements.namedItem("message") as HTMLInputElement;
+
+      const message = input.value;
+      input.value = "";
+
+      const { roomId } = await fetch("/api/room-id", { method: "post" }).then((res) => res.json());
+
+      await fetch(`/chat/${roomId}`, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+    });
+  }
+};
+```
+
+```ts
+// frontend/event-handlers/index.ts
+import { handle as handleFormSubmission } from "./chat-message-form-submission";
+
+export default [handleFormSubmission];
+```
+
+Next, the message handler to update the user's interface whenever a chat message is received will obtain references to the message area, and the message template. Notice that the references are obtained _before_ the function definition - we want to do this once, when this module is loaded, rather than each time the function is executed to avoid adding any overhead to each function call. The `<template>` element us hidden on the page, but can be obtained with its `id`, and "cloned" to provide our code with a document fragment copy of the template, which we can then fill out as needed:
+
+```ts
+import { Socket } from "socket.io-client";
+import { format, render } from "timeago.js";
+
+import { CHAT_MESSAGE } from "../../backend/sockets/constants";
+
+export type ChatMessage = {
+  roomId: string;
+  message: string;
+  senderEmail: string;
+  gravatar: string;
+  timestamp: number;
+};
+
+const messageArea = document.querySelector<HTMLElement>("#chat-message-area");
+const messageTemplate = document.querySelector<HTMLTemplateElement>("#chat-message-template");
+
+export default function (socket: Socket) {
+  socket.on(CHAT_MESSAGE, ({ roomId, message, senderEmail, gravatar, timestamp }: ChatMessage) => {
+    if (messageTemplate === null || messageArea === null) {
+      console.error("Chat functionality not configured on this page");
+      return;
+    }
+
+    const messageElement = messageTemplate.content.cloneNode(true) as HTMLElement;
+
+    const img = messageElement.querySelector<HTMLImageElement>("img");
+    img!.src = `https://gravatar.com/avatar/${gravatar}`;
+    img!.alt = `${senderEmail}'s gravatar`;
+
+    const userName = messageElement.querySelector<HTMLElement>("span.chat-message-username");
+    userName!.textContent = senderEmail.substring(0, senderEmail.indexOf("@"));
+
+    const timestampElement = messageElement.querySelector<HTMLTimeElement>("time");
+    timestampElement!.dateTime = timestamp.toString();
+    render(timestampElement!);
+
+    const content = messageElement.querySelector<HTMLElement>(".chat-message-body");
+    content!.textContent = message;
+
+    messageArea.insertBefore(messageElement, messageArea.firstChild);
+    messageArea.scrollTop = messageArea.scrollHeight;
+  });
+}
+```
+
+```ts
+// frontend/messages/index.ts
+import { default as chatMessageHandler } from "./chat-message";
+
+export default [chatMessageHandler];
+```
+
+Update the frontend's code entry point ([`frontend/index.ts`](/frontend/index.ts)) to set up the event and message handlers (and add some type information, if you're into that):
+
+```ts
+import { Socket, io } from "socket.io-client";
+
+import handlers from "./event-handlers";
+import messageHandlers from "./messages";
+
+// Provides us with type information on the io object
+declare global {
+  interface Window {
+    socket: Socket;
+  }
+}
+
+window.socket = io();
+
+handlers.forEach((handler) => handler());
+messageHandlers.forEach((handler) => handler(window.socket));
+```
+
+You should now be able to see updates in the message area as different users post messages!
+
+</details>
+
+<details>
+  <summary>Installing Socket.IO</summary>
+
+### [Installing socket.io](https://github.com/sfsu-csc-667-spring-2024-roberts/jrobs-term-project/commit/fbb218e053bbf095ab36c61de7e609ec6e49ba25)
+
+With much of the game logic set up, we can now add [socket.io](https://socket.io/).
+
+```
+npm install socket.io socket.io-client
+```
+
+#### Backend setup
+
+We need to change the setup of the express app a little in [`server.js`](/backend/server.js) to share the same http server between the express application and socket.io. Where before we created an instance of an express application, and used that instance to listen for requests, we will now first create an http server, and share that server instance between the express app and the socket io server. In addition, we need to share the session middleware between the express app and the socket server.
+
+```js
+const app = express();
+
+const server = createServer(app);
+const io = new Server(server);
+initialize(io);
+// Make the io object accessible to the routes
+app.set("io", io);
+
+// Share the session middleware
+const sessionMiddleware = configure.session();
+app.use(sessionMiddleware);
+io.engine.use(sessionMiddleware);
+
+// Change to listen
+// app.listen(PORT, () => {
+server.listen(PORT, () => {
+  // etc.
+});
+```
+
+To keep my code organized, I added a new directory: `backend/sockets`, and an `initialize` method in [`backend/sockets/initialize.js`](/backend/sockets/initialize.js) (note that this is the `initialize` method we see imported in the last code snippet):
+
+```js
+import { Server } from "socket.io";
+
+const bindToSession = (socket) => {
+  const { request } = socket;
+
+  socket.join(request.session.id);
+
+  socket.use((_, next) => {
+    request.session.reload((error) => {
+      if (error) {
+        socket.disconnect();
+      } else {
+        next();
+      }
+    });
+  });
+};
+
+export default function initialize(server) {
+  const io = new Server(server);
+
+  io.on("connection", (socket) => {
+    bindToSession(socket);
+
+    console.log(`a user connected with session id ${socket.request.session.id}`);
+
+    socket.on("disconnect", () => {
+      console.log(`user disconnected with session id ${socket.request.session.id}`);
+    });
+  });
+
+  return io;
+}
+```
+
+The `initialize` function creates and returns the socket.io server. Since _no websocket requests should be coming from the client_, this should be sufficient for the server side socket setup (listening for the connection and disconnection events). The `bindToSession` function takes the socket instance, and calls the `join` method with the user's session id - this creates a specific channel that only that user will receive messages on, named using the user's session id. The middleware in `bindToSession` ensures that the session is correctly reloaded every time a user disconnects and reconnects.
+
+#### Frontend setup
+
+There are a few different ways we can include the necessary client code, but since we have build tooling set up, I have chosen to use npm to install the `socket.io-client` package (installed above). We can finally make use of the [`frontend/index.ts`](/frontend/index.ts) to test the connection:
+
+```ts
+import { io } from "socket.io-client";
+
+const socket = io();
+```
+
+Visit your site. You should now see the output specified in the socket initialization function (either `a user connected` or `user disconnected`).
+
+In the shell where the server is running, I now see a message like:
+
+```
+[dev:serve] a user connected with session id zHItdEDeMiviGFyQPkdgH4G13PaNctU6
+```
+
+If we peek at the session table:
+
+```
+> select * from session order by expire desc;
++----------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+| sid                              | sess                                                                                                                                                                                                        | expire              |
+|----------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------|
+| zHItdEDeMiviGFyQPkdgH4G13PaNctU6 | {"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"user":{"id":1,"email":"roberts.john@gmail.com","gravatar":"7c795287fa483b5c1f6a4345a47d88a0d50f4350e755b933509be9f0c8297fb7"}} | 2024-04-15 10:51:11 |
++----------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+```
+
+</details>
+
 ## Game setup
 
 <details>
   <summary>Fetching game state</summary>
 
-### Fetching game state
+### [Fetching game state](https://github.com/sfsu-csc-667-spring-2024-roberts/jrobs-term-project/commit/df6dcb17d77521388935d0f617a601db2f1dfee6)
 
 All the pieces are in place to be able to create an object that represents the entire game state. Previously, our `get` method in our games database logic only included user information; we can now update this to include the card information. I made some changes to templates that I won't add here; the relevant state updates are happening in [`backend/db/games/index.js`](/backend/db/games/index.js):
 
@@ -103,19 +630,13 @@ import db, { pgp } from "../connection.js";
 
 const Sql = {
   /* existing queries */
-  SHUFFLED_DECK:
-    "SELECT *, random() AS rand FROM standard_deck_cards ORDER BY rand",
-  ASSIGN_CARDS:
-    "UPDATE game_cards SET user_id=$1 WHERE game_id=$2 AND user_id=-1",
+  SHUFFLED_DECK: "SELECT *, random() AS rand FROM standard_deck_cards ORDER BY rand",
+  ASSIGN_CARDS: "UPDATE game_cards SET user_id=$1 WHERE game_id=$2 AND user_id=-1",
 };
 
 const create = async (creatorId, description) => {
   try {
-    const { id } = await db.one(Sql.CREATE, [
-      creatorId,
-      description || "placeholder",
-      1,
-    ]);
+    const { id } = await db.one(Sql.CREATE, [creatorId, description || "placeholder", 1]);
 
     if (description === undefined || description.length === 0) {
       await db.none(Sql.UPDATE_DESCRIPTION, [`Game ${id}`, id]);
@@ -145,10 +666,9 @@ const join = async (gameId, userId) => {
 const initialize = async (gameId, creatorId) => {
   const deck = await db.any(Sql.SHUFFLED_DECK);
 
-  const columns = new pgp.helpers.ColumnSet(
-    ["user_id", "game_id", "card_id", "card_order"],
-    { table: "game_cards" },
-  );
+  const columns = new pgp.helpers.ColumnSet(["user_id", "game_id", "card_id", "card_order"], {
+    table: "game_cards",
+  });
   const values = deck.map(({ id }, index) => ({
     user_id: index % 2 === 0 ? creatorId : -1,
     game_id: gameId,
@@ -335,18 +855,14 @@ In [`backend/db/users/index.js`](/backend/db/users/index.js)
 import db from "../connection.js";
 
 const Sql = {
-  CREATE:
-    "INSERT INTO games (creator_id, description) VALUES ($1, $2) RETURNING id",
+  CREATE: "INSERT INTO games (creator_id, description) VALUES ($1, $2) RETURNING id",
   UPDATE_DESCRIPTION: "UPDATE games SET description=$1 WHERE id=$2",
   ADD_PLAYER: "INSERT INTO game_users (game_id, user_id) VALUES ($1, $2)",
 };
 
 const create = async (creatorId, description) => {
   try {
-    const { id } = await db.one(Sql.CREATE, [
-      creatorId,
-      description || "placeholder",
-    ]);
+    const { id } = await db.one(Sql.CREATE, [creatorId, description || "placeholder"]);
 
     if (description === undefined) {
       await db.none(Sql.UPDATE_DESCRIPTION, [`Game ${id}`, id]);
@@ -437,10 +953,10 @@ Now, all of the game data that is returned can be used in the template. Check ou
 
 ```json
 {
-  "id": 11,
   "created_at": "2024-04-05T23:21:43.966Z",
   "creator_id": 5,
   "description": "My super fun game",
+  "id": 11,
   "users": [
     {
       "id": 5,
@@ -469,15 +985,10 @@ We will frequently need user information in our templates. In this example, I wi
 import { createHash } from "crypto";
 
 export default function (request, response, next) {
-  if (
-    request.session.user !== undefined &&
-    request.session.user.id !== undefined
-  ) {
+  if (request.session.user !== undefined && request.session.user.id !== undefined) {
     response.locals.user = {
       ...request.session.user,
-      hash: createHash("sha256")
-        .update(request.session.user.email)
-        .digest("hex"),
+      hash: createHash("sha256").update(request.session.user.email).digest("hex"),
     };
 
     next();
@@ -583,8 +1094,7 @@ We can now hook up the logic for user creation with the registration form. This 
 import db from "../connection.js";
 
 const Sql = {
-  INSERT:
-    "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email",
+  INSERT: "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email",
   EXISTS: "SELECT id FROM users WHERE email=$1",
   // Note that this is ONLY for use in our backend (since it returns the password)
   FIND: "SELECT * FROM users WHERE email=$1 AND password=$2",
@@ -639,6 +1149,7 @@ To keep my route file concise, I added a module to handle the password related f
 
 ```js
 import bcrypt from "bcrypt";
+
 import { Users } from "../../db/index.js";
 
 const SALT_ROUNDS = 10;
@@ -670,10 +1181,7 @@ With all of this logic in place, the [`backend/middleware/is-authenticated.js`](
 
 ```js
 export default function (request, response, next) {
-  if (
-    request.session.user !== undefined &&
-    request.session.user.id !== undefined
-  ) {
+  if (request.session.user !== undefined && request.session.user.id !== undefined) {
     next();
   } else {
     response.redirect("/");
