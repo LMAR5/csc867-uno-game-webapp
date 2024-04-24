@@ -5,6 +5,7 @@ import { createServer } from "http";
 import createError from "http-errors";
 import morgan from "morgan";
 import * as path from "path";
+import { fileURLToPath } from "url";
 
 import * as configure from "./config/index.js";
 import * as middleware from "./middleware/index.js";
@@ -14,9 +15,11 @@ import * as sockets from "./sockets/index.js";
 const PORT = process.env.PORT || 3000;
 // Note that this path omits "backend" - server is running in the backend directory
 // so BACKEND_PATH is PROJECT_ROOT/backend
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
 const BACKEND_PATH = import.meta.dirname;
-const STATIC_PATH = path.join(BACKEND_PATH, "static");
-const VIEW_PATH = path.join(BACKEND_PATH, "routes");
+const STATIC_PATH = path.join(__dirname, "static");
+const VIEW_PATH = path.join(__dirname, "routes");
 
 const app = express();
 const server = createServer(app);

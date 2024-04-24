@@ -1,6 +1,7 @@
 import express from "express";
 import { Users } from "../../db/index.js";
 import { checkPassword, encryptPassword } from "./password-handling.js";
+import { format } from "morgan";
 
 const router = express.Router();
 
@@ -9,16 +10,31 @@ router.get("/register", (_request, response) => {
 });
 
 router.post("/register", async (request, response) => {
-  const { password, email } = request.body;
+  const { password, email, confirmPassword, firstName, lastName } = request.body;
+
+  if(password != confirmPassword){
+    return response.redirect("auth/register", { 
+      errorMessage: "Passwords don't match.",
+      format: 'register'
+    });
+  }
 
   if (await Users.exists(email)) {
     // The user email already exists in our database
-    response.redirect("/auth/login");
+    return response.redirect("/auth/register",{
+      errorMessage: "Email already in use."
+    });
   } else {
+    try{
     const encryptedPassword = await encryptPassword(password);
-
-    request.session.user = await Users.create(email, encryptedPassword);
-    response.redirect("/lobby");
+    request.session.user = await Users.create(email, encryptedPassword, firstName, lastName);
+    response.redirect("/auth/login");
+    } catch (error){
+      console.error(error);
+      response.redirect("/auth/register", {
+        errorMessage: "Error occurred. Please try again.",
+      });
+    }
   }
 });
 
@@ -43,8 +59,11 @@ router.post("/login", async (request, response) => {
       throw "User not found";
     }
   } catch (error) {
-    // If we were nice, we would add an error message of some sort
-    response.redirect("/login");
+    console.error(error);
+      response.render("/auth/login", {
+        errorMessage: "Error occurred. Please try again.",
+        format: 'login'
+      });
   }
 });
 
@@ -59,7 +78,7 @@ router.get("/logout", (request, response, next) => {
       if (error) {
         next(error);
       }
-      response.redirect("/");
+      response.redirect("/auth/login");
     });
   });
 });
