@@ -1,7 +1,7 @@
 import db, { pgp } from "../connection.js";
 
 const Sql = {
-  CREATE: "INSERT INTO games (creator_id, description) VALUES ($1, $2) RETURNING id",
+  CREATE: "INSERT INTO games (creator_id, description, number_players) VALUES ($1, $2, $3) RETURNING id",
   UPDATE_DESCRIPTION: "UPDATE games SET description=$1 WHERE id=$2 RETURNING description",
   ADD_PLAYER: "INSERT INTO game_users (game_id, user_id, seat) VALUES ($1, $2, $3)",
   IS_PLAYER_IN_GAME:
@@ -31,14 +31,13 @@ const Sql = {
     ORDER BY game_cards.card_order`,
 };
 
-const create = async (creatorId, gameDescription) => {
-  try {
-    const { id, description } = await db.one(Sql.CREATE, [
+const create = async (creatorId, gameDescription, numberPlayers) => {
+  try {    
+    const { id, description, number_players } = await db.one(Sql.CREATE, [
       creatorId,
       gameDescription || "placeholder",
-      1,
-    ]);
-
+      numberPlayers,
+    ]);    
     let finalDescription = description;
     if (gameDescription === undefined || gameDescription.length === 0) {
       finalDescription = (await db.one(Sql.UPDATE_DESCRIPTION, [`Game ${id}`, id])).description;
@@ -48,7 +47,7 @@ const create = async (creatorId, gameDescription) => {
 
     await initialize(id, creatorId);
 
-    return { id, description: finalDescription };
+    return { id, description: finalDescription, number_players };
   } catch (error) {
     console.error(error);
     throw error;

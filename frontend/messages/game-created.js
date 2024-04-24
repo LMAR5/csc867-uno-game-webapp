@@ -15,6 +15,7 @@ export default function handle(socket) {
       creatorEmail, //string
       creatorGravatar, //string
       description, //string
+      number_players, //int
     }) => {
       if (gamesList === null || availableGameTemplate === null) {
         console.error("Games list or template not found");

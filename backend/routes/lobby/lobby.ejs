@@ -1,24 +1,42 @@
 <%- include('../layout/header', { suppressHeader: true }) %>
 <div class="flex flex-row">
   <div class="basis-2/3 pr-10">
-    <div
-      class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"
-    >
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
       <div class="px-4 py-5 sm:px-6 flex flex-row justify-between items-center">
-        <h2 class="font-bold text-2xl basis-1/3">Go to War</h2>
+        <h2 class="font-bold text-2xl basis-1/5">Uno</h2>
         <form
-          class="sm:flex sm:items-center basis-2/3 justify-end"
+          class="sm:flex sm:items-center basis-4/5 justify-end"
           action="/games/create"
           method="post"
         >
-          <div class="w-full sm:max-w-xs">
-            <label for="description" class="sr-only">Email</label>
+          <div class="w-full sm:max-w-xs mr-1.5">
+            <label for="description" class="">Game Session</label>
             <input
               name="description"
               id="description"
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="Brief game description"
+              placeholder="Title of session"
             />
+          </div>
+          <div class="w-full sm:max-w-xs">
+            <label for="number_players" class="">Number of players</label>
+            <select
+                id="number_players"
+                name="number_players"
+                autocomplete="number-players"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option>Select option</option>                
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+              </select>
           </div>
           <button
             id="create-game"
