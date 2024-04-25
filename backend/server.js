@@ -1,6 +1,8 @@
 import cookieParser from "cookie-parser";
 import "dotenv/config.js";
 import express from "express";
+import session from "express-session";
+import flash from "connect-flash";
 import { createServer } from "http";
 import createError from "http-errors";
 import morgan from "morgan";
@@ -26,6 +28,15 @@ const server = createServer(app);
 const io = sockets.initialize(server);
 // Make the io object accessible to the routes
 app.set("io", io);
+
+// app.use(session({
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: "auto" }
+// }));
+
+app.use(flash());
 
 app.use(middleware.menuItemsDefault);
 app.use(morgan("dev"));

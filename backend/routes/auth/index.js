@@ -13,15 +13,14 @@ router.post("/register", async (request, response) => {
   const { password, email, confirmPassword, firstName, lastName } = request.body;
 
   if(password != confirmPassword){
-    return response.redirect("auth/register", { 
-      errorMessage: "Passwords don't match.",
-      format: 'register'
+    return response.status(400).send({ 
+      errorMessage: "Passwords don't match. Please Try again.",
     });
   }
 
   if (await Users.exists(email)) {
     // The user email already exists in our database
-    return response.redirect("/auth/register",{
+    return response.status(400).send({
       errorMessage: "Email already in use."
     });
   } else {
@@ -31,7 +30,7 @@ router.post("/register", async (request, response) => {
     response.redirect("/auth/login");
     } catch (error){
       console.error(error);
-      response.redirect("/auth/register", {
+      response.status(400).send({
         errorMessage: "Error occurred. Please try again.",
       });
     }
@@ -60,7 +59,7 @@ router.post("/login", async (request, response) => {
     }
   } catch (error) {
     console.error(error);
-      response.render("/auth/login", {
+      response.send(400).send({
         errorMessage: "Error occurred. Please try again.",
         format: 'login'
       });
