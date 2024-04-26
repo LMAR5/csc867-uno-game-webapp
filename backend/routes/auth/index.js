@@ -13,14 +13,15 @@ router.post("/register", async (request, response) => {
   const { password, email, confirmPassword, firstName, lastName } = request.body;
 
   if(password != confirmPassword){
-    return response.status(400).send({ 
+    return response.render("auth/register", { 
       errorMessage: "Passwords don't match. Please Try again.",
+      format: 'register'
     });
   }
 
   if (await Users.exists(email)) {
     // The user email already exists in our database
-    return response.status(400).send({
+    return response.render("auth/register", {
       errorMessage: "Email already in use."
     });
   } else {
@@ -55,11 +56,11 @@ router.post("/login", async (request, response) => {
 
       response.redirect("/lobby");
     } else {
-      throw "User not found";
+      throw "Incorrect Username or Password!";
     }
   } catch (error) {
     console.error(error);
-      response.send(400).send({
+      response.render("auth/login", {
         errorMessage: "Error occurred. Please try again.",
         format: 'login'
       });
