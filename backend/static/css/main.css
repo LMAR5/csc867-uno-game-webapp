@@ -35,15 +35,6 @@
 7. Disable tap highlights on iOS
 */
 
-/*Error message display*/
-.error-message {
-  margin: 10px 0;
-  padding: 12px;
-  background-color: #f44336; /* Red */
-  color: white;
-  text-align: center;
-  border-radius: 5px;
-}
 html,
 :host {
   line-height: 1.5;
@@ -815,6 +806,7 @@ html,
 /* center - suit icons */
 
 /* jokers */
+
 
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
