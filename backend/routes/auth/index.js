@@ -56,12 +56,12 @@ router.post("/login", async (request, response) => {
 
       response.redirect("/lobby");
     } else {
-      throw "Incorrect Username or Password!";
+      throw "Error occurred. Please try again.";
     }
   } catch (error) {
     console.error(error);
       response.render("auth/login", {
-        errorMessage: "Error occurred. Please try again.",
+        errorMessage: "Incorrect Email or Password! Please try again.",
         format: 'login'
       });
   }
