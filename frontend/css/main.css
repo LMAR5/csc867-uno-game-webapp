@@ -15,7 +15,6 @@
   body {
     @apply h-full;
   }
-
   .menu-item {
     @apply text-gray-300;
     @apply hover:bg-gray-700;
@@ -32,6 +31,7 @@
     @apply text-white;
   }
 
+  
   /*
   Deck of CSS Cards
   by Jeff Yaus
@@ -417,4 +417,15 @@
   .card-joker-alt span:before {
     color: #cc0000;
   }
+
+      /* Error message display*/
+.error-message {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  background-color: #b91c1c;
+  color: white;
+  text-align: center;
+  border-radius: 0.375rem;
+}
 }

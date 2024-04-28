@@ -17,6 +17,14 @@ exports.up = (pgm) => {
       notNull: true,
       default: pgm.func("current_timestamp"),
     },
+    is_active: {
+      type: "boolean",
+      notNull: true,
+      default: "true",
+    },
+    current_turn: {
+      type: "int",
+    },
   });
 };
 
