@@ -59,6 +59,7 @@ app.use("/lobby", routes.lobby);
 app.use("/games", routes.games);
 app.use("/api", routes.api);
 app.use("/chat", routes.chat);
+app.use("/test", routes.test);
 
 server.listen(PORT, () => {
   console.log(
