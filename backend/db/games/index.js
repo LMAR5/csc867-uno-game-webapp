@@ -1,14 +1,14 @@
 import db, { pgp } from "../connection.js";
 
 const Sql = {
-  CREATE: "INSERT INTO games (creator_id, description) VALUES ($1, $2) RETURNING id",
+  CREATE: "INSERT INTO games (creator_id, description, number_players) VALUES ($1, $2, $3) RETURNING id",
   UPDATE_DESCRIPTION: "UPDATE games SET description=$1 WHERE id=$2 RETURNING description",
-  ADD_PLAYER: "INSERT INTO game_users (game_id, user_id, seat) VALUES ($1, $2, $3)",
+  ADD_PLAYER: "INSERT INTO game_users (game_id, user_id, turn_order) VALUES ($1, $2, $3)",
   IS_PLAYER_IN_GAME:
     "SELECT * FROM game_users WHERE game_users.game_id=$1 AND game_users.user_id=$2",
   GET_GAME: "SELECT * FROM games WHERE id=$1",
   GET_USERS:
-    "SELECT users.id, users.email, users.gravatar, game_users.seat FROM users, game_users, games WHERE games.id=$1 AND game_users.game_id=games.id AND game_users.user_id=users.id ORDER BY game_users.seat",
+    "SELECT users.id, users.email, users.gravatar, game_users.turn_order FROM users, game_users, games WHERE games.id=$1 AND game_users.game_id=games.id AND game_users.user_id=users.id ORDER BY game_users.turn_order",
   GET_AVAILABLE: `
     SELECT games.*, users.email, users.gravatar FROM games
     INNER JOIN (
@@ -31,14 +31,13 @@ const Sql = {
     ORDER BY game_cards.card_order`,
 };
 
-const create = async (creatorId, gameDescription) => {
-  try {
-    const { id, description } = await db.one(Sql.CREATE, [
+const create = async (creatorId, gameDescription, numberPlayers) => {
+  try {    
+    const { id, description, number_players } = await db.one(Sql.CREATE, [
       creatorId,
       gameDescription || "placeholder",
-      1,
-    ]);
-
+      numberPlayers,
+    ]);    
     let finalDescription = description;
     if (gameDescription === undefined || gameDescription.length === 0) {
       finalDescription = (await db.one(Sql.UPDATE_DESCRIPTION, [`Game ${id}`, id])).description;
@@ -48,7 +47,7 @@ const create = async (creatorId, gameDescription) => {
 
     await initialize(id, creatorId);
 
-    return { id, description: finalDescription };
+    return { id, description: finalDescription, number_players };
   } catch (error) {
     console.error(error);
     throw error;
@@ -111,7 +110,7 @@ const join = async (gameId, userId) => {
 const initialize = async (gameId, creatorId) => {
   const deck = await db.any(Sql.SHUFFLED_DECK);
 
-  const columns = new pgp.helpers.ColumnSet(["user_id", "game_id", "card_id", "card_order"], {
+  const columns = new pgp.helpers.ColumnSet(["user_id", "game_id", "card_id", "card_order", "status"], {
     table: "game_cards",
   });
   const values = deck.map(({ id }, index) => ({
@@ -119,6 +118,7 @@ const initialize = async (gameId, creatorId) => {
     game_id: gameId,
     card_id: id,
     card_order: Math.floor(index / 2),
+    status: index % 2 === 0 ? "player" : "deck",
   }));
 
   const query = pgp.helpers.insert(values, columns);
