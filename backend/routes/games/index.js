@@ -6,16 +6,15 @@ import { GAME_CREATED, GAME_REMOVED } from "../../sockets/constants.js";
 const router = express.Router();
 
 router.post("/create", async (request, response) => {
-  const { id: creatorId, gravatar: creatorGravatar, email: creatorEmail } = request.session.user;
-  const { description } = request.body;
-
+  const { id: creatorId, gravatar: creatorGravatar, email: creatorEmail } = request.session.user;  
+  const { description, number_players } = request.body;
   try {
     const io = request.app.get("io");
-    const { id, description: finalDescription } = await Games.create(creatorId, description);
-
+    const { id, description: finalDescription, finalNumberPlayers } = await Games.create(creatorId, description, number_players);
     io.emit(GAME_CREATED, {
       gameId: id,
       description: finalDescription,
+      number_players: finalNumberPlayers,
       creatorGravatar,
       creatorEmail,
     });
