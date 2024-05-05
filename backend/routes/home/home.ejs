@@ -1,6 +1,9 @@
 <%- include('../layout/header-no-nav') %>
-<div class="relative isolate overflow-hidden bg-gray-900">
-  <svg
+<div class="h-full relative overflow-hidden rounded-lg bg-cover bg-no-repeat p-12" 
+style="background-image: url('/images/uno.jpg');">
+  <div class="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-fixed" 
+  style="background-color: rgba(0, 0, 0, 0.6)">
+    <!-- <svg
     class="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
     aria-hidden="true"
   >
@@ -28,14 +31,9 @@
       stroke-width="0"
       fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)"
     />
-  </svg>
-  <div
-    class="absolute left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
-    aria-hidden="true"
-  >
-    <div
-      class="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-20"
-      style="
+  </svg> -->
+    <!-- <div class="absolute left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]" aria-hidden="true">
+      <div class="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-20" style="
         clip-path: polygon(
           73.6% 51.7%,
           91.7% 11.8%,
@@ -54,46 +52,32 @@
           58.9% 0.2%,
           73.6% 51.7%
         );
-      "
-    ></div>
-  </div>
-  <div
-    class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40"
-  >
-    <div class="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
-      <h1
-        class="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl"
-      >
-        UNO
-      </h1>
-      <p class="mt-6 text-lg leading-8 text-gray-300">
-        Join us for an exhilarating game of UNO, where every card flip brings a new twist and every play keeps you on the edge of your seat!
-      </p>
-      <div class="mt-10 flex items-center gap-x-6">
-        <a
-          href="/auth/login"
-          class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
-          >Sign In</a
-        >
-        <a
-          href="/auth/register"
-          class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
-          >Register</a
-        >
+      "></div>
+    </div> -->
+    <div class="mx-auto max-w-7xl px-6 pb-24 pt-10 text-center sm:pb-32 lg:flex lg:px-8 lg:py-40 lg:items-center lg:justify-center">
+      <div class="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
+        <h1 class="mt-10 text-4xl text-center font-bold tracking-tight text-white sm:text-6xl">
+          UNO!
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-center text-gray-300">
+          Join us for an exhilarating game of UNO, where every card flip brings a new twist and every play keeps you on the edge of your seat!
+        </p>
+        <div class="mt-10 flex items-center place-content-center gap-x-7">
+          <a href="/auth/login" class="rounded border-2 border-neutral-50 px-7 pb-[8px] pt-[10px] text-sm font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:border-neutral-100 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-neutral-100 focus:border-neutral-100 focus:text-neutral-100 focus:outline-none focus:ring-0 active:border-neutral-200 active:text-neutral-200 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10">Sign In</a>
+          <a href="/auth/register" class="rounded border-2 border-neutral-50 px-7 pb-[8px] pt-[10px] text-sm font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:border-neutral-100 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-neutral-100 focus:border-neutral-100 focus:text-neutral-100 focus:outline-none focus:ring-0 active:border-neutral-200 active:text-neutral-200 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10">Register</a>
+        </div>
       </div>
-    </div>
-    <div
-      class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32"
-    >
-      <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
+      <!-- <div class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
+        <div class="max-w-3xl flex-none cursor-pointer filter grayscale hover:grayscale-0" sm:max-w-5xl lg:max-w-none">
         <img
           src="/images/cards.jpg"
           alt="App screenshot"
           width="2432"
           height="1442"
-          class="w-[55rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10"
+          class="w-[30rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10"
         />
       </div>
+      </div> -->
     </div>
   </div>
 </div>
