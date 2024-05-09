@@ -1,14 +1,14 @@
 import db, { pgp } from "../connection.js";
 
 const Sql = {
-  CREATE: "INSERT INTO games (creator_id, description, number_players) VALUES ($1, $2, $3) RETURNING id",
+  CREATE: "INSERT INTO games (creator_id, description, current_turn, number_players) VALUES ($1, $2, 1, $3) RETURNING id",
   UPDATE_DESCRIPTION: "UPDATE games SET description=$1 WHERE id=$2 RETURNING description",
   ADD_PLAYER: "INSERT INTO game_users (game_id, user_id, turn_order) VALUES ($1, $2, $3)",
   IS_PLAYER_IN_GAME:
     "SELECT * FROM game_users WHERE game_users.game_id=$1 AND game_users.user_id=$2",
   GET_GAME: "SELECT * FROM games WHERE id=$1",
   GET_USERS:
-    "SELECT users.id, users.email, users.gravatar, game_users.turn_order FROM users, game_users, games WHERE games.id=$1 AND game_users.game_id=games.id AND game_users.user_id=users.id ORDER BY game_users.turn_order",
+    "SELECT users.id, users.email, users.first_name, users.last_name, users.gravatar, game_users.turn_order FROM users, game_users, games WHERE games.id=$1 AND game_users.game_id=games.id AND game_users.user_id=users.id ORDER BY game_users.turn_order",
   GET_AVAILABLE: `
     SELECT games.*, users.email, users.gravatar FROM games
     INNER JOIN (
@@ -29,6 +29,7 @@ const Sql = {
     SELECT * FROM game_cards, standard_deck_cards
     WHERE game_cards.game_id=$1 AND game_cards.card_id=standard_deck_cards.id
     ORDER BY game_cards.card_order`,
+  GET_CURRENT_USERS_TURN: `SELECT u.first_name, u.last_name, gu.game_id, gu.turn_order FROM users u JOIN game_users gu ON gu.user_id = u.id JOIN games g ON g.id = gu.game_id AND g.current_turn = gu.turn_order WHERE g.id = $1`
 };
 
 const create = async (creatorId, gameDescription, numberPlayers) => {
@@ -55,10 +56,11 @@ const create = async (creatorId, gameDescription, numberPlayers) => {
 };
 
 const get = async (gameId) => {
-  const [game, users, cards] = await Promise.all([
+  const [game, users, cards, curr_turn] = await Promise.all([
     db.one(Sql.GET_GAME, [gameId]),
     db.any(Sql.GET_USERS, [gameId]),
     db.any(Sql.GET_CARDS, [gameId]),
+    db.any(Sql.GET_CURRENT_USERS_TURN, [gameId]),
   ]);
 
   // We may not have a second user yet
@@ -85,6 +87,7 @@ const get = async (gameId) => {
   return {
     ...game,
     users: userData,
+    user_turn: curr_turn,
   };
 };
 

@@ -819,6 +819,71 @@ html,
   border-radius: 0.375rem;
 }
 
+.uno-card {
+  height: 8.85em;
+  width: 6.4em;
+  background: #fff url("../images/uno_cards.png") no-repeat;
+  background-size: 1250% 800%;
+  border: 1px solid #000000;
+  border-radius: 0.5em;
+  box-shadow: 0 0 0.5em -0.15em #000;
+  /* position: absolute; */
+}
+
+/* SUITS: Wild, Yellow, Blue, Green */
+
+.W {
+  background-position-y: 0;
+}
+
+.Y {
+  background-position-y: -8.8em;
+}
+
+/* TYPES: Number card, Action card, Wild card */
+
+/* VALUES: 1,2,3,4,5,6,7,8,9,10 (draw),11 (reverse),12 (skip),13 (wild),14 (wild draw 4) */
+
+/* wild cards */
+
+.downCard {
+  background-position-x: 0;
+}
+
+/* Yellow */
+
+.yellow3 {
+  background-position-x: -12.85em;
+}
+
+.yellow4 {
+  background-position-x: -19.3em
+}
+
+.yellow5 {
+  background-position-x: -25.7em
+}
+
+.yellow6 {
+  background-position-x: -32.1em
+}
+
+.yellow7 {
+  background-position-x: -38.5em;
+}
+
+.yellow8 {
+  background-position-x: -45em;
+}
+
+.yellow9 {
+  background-position-x: -51.4em;
+}
+
+.yellow0 {
+  background-position-x: -57.85em;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -939,6 +1004,10 @@ html,
   border-width: 0;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 .fixed {
   position: fixed;
 }
@@ -1000,19 +1069,23 @@ html,
   grid-column: span 1 / span 1;
 }
 
+.float-right {
+  float: right;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
 }
 
-.mx-4 {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
-
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+.my-8 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .mb-1 {
@@ -1023,12 +1096,20 @@ html,
   margin-bottom: 0.375rem;
 }
 
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
 .ml-10 {
   margin-left: 2.5rem;
 }
 
 .ml-4 {
   margin-left: 1rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
 }
 
 .mr-4 {
@@ -1059,20 +1140,20 @@ html,
   margin-top: 0.75rem;
 }
 
-.mt-6 {
-  margin-top: 1.5rem;
-}
-
 .mt-4 {
   margin-top: 1rem;
 }
 
-.mb-4 {
-  margin-bottom: 1rem;
+.mt-6 {
+  margin-top: 1.5rem;
 }
 
 .block {
   display: block;
+}
+
+.inline {
+  display: inline;
 }
 
 .flex {
@@ -1093,6 +1174,11 @@ html,
 
 .aspect-\[1108\/632\] {
   aspect-ratio: 1108/632;
+}
+
+.size-7 {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .h-10 {
@@ -1243,12 +1329,20 @@ html,
   transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .resize-none {
   resize: none;
 }
 
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -1480,6 +1574,16 @@ html,
 .bg-indigo-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(99 102 241 / var(--tw-bg-opacity));
+}
+
+.bg-red-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity));
+}
+
+.bg-red-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
 .bg-sky-100 {
@@ -1795,6 +1899,11 @@ html,
   color: rgb(129 140 248 / var(--tw-text-opacity));
 }
 
+.text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
 .text-sky-600 {
   --tw-text-opacity: 1;
   color: rgb(2 132 199 / var(--tw-text-opacity));
@@ -1861,6 +1970,10 @@ html,
   --tw-ring-color: rgb(209 213 219 / var(--tw-ring-opacity));
 }
 
+.ring-red-600\/10 {
+  --tw-ring-color: rgb(220 38 38 / 0.1);
+}
+
 .ring-white\/10 {
   --tw-ring-color: rgb(255 255 255 / 0.1);
 }
@@ -1921,6 +2034,11 @@ html,
 .hover\:bg-indigo-400:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(129 140 248 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-sky-500:hover {
@@ -1991,6 +2109,10 @@ html,
 
 .focus-visible\:outline-indigo-500:focus-visible {
   outline-color: #6366f1;
+}
+
+.focus-visible\:outline-red-600:focus-visible {
+  outline-color: #dc2626;
 }
 
 .focus-visible\:outline-sky-600:focus-visible {
