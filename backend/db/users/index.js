@@ -8,6 +8,7 @@ const Sql = {
   EXISTS: "SELECT id FROM users WHERE email=$1",
   // Note that this is ONLY for use in our backend (since it returns the password)
   FIND: "SELECT * FROM users WHERE email=$1",
+  GET_USER_SOCKET: "SELECT sid FROM session WHERE sess->'user'->>'id'='$1' ORDER BY expire DESC LIMIT 1",
 };
 
 const create = async (email, password, first_name, last_name) => {
@@ -35,8 +36,11 @@ const find = async (email) => {
   }
 };
 
+const getUserSocket = (user_id) => db.one(Sql.GET_USER_SOCKET, [parseInt(user_id)]);
+
 export default {
   create,
   exists,
   find,
+  getUserSocket,
 };

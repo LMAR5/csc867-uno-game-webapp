@@ -12,7 +12,7 @@ exports.up = (pgm) => {
     },
   });
   // This field snuck in from a copy and paste error, so removing it until we need it
-  pgm.dropColumn("games", "game_socket_id");
+  // pgm.dropColumn("games", "game_socket_id");
 };
 
 /**

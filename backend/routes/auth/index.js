@@ -51,6 +51,8 @@ router.post("/login", async (request, response) => {
       request.session.user = {
         id: user.id,
         email: user.email,
+        firstname: user.first_name,
+        lastname: user.last_name,
         gravatar: user.gravatar,
       };
 
