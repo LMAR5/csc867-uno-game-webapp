@@ -23,6 +23,12 @@ export default function (socket) {
       return;
     }
 
+    // Only render messages that belong to the current room.
+    if (roomId !== currentRoomId) {
+        console.log(`Received message for room ${roomId}, but the current room is ${currentRoomId}. Message not displayed.`);
+        return;
+    }
+
     const messageElement = messageTemplate.content.cloneNode(true); // as HTMLElement;
 
     //const img = messageElement.querySelector<HTMLImageElement>("img"); // HTMLImageElement
@@ -36,7 +42,8 @@ export default function (socket) {
 
     //const timestampElement = messageElement.querySelector<HTMLTimeElement>("time");
     const timestampElement = messageElement.querySelector("time"); // HTMLTimeElement
-    timestampElement.dateTime = timestamp.toString();
+    // timestampElement.dateTime = timestamp.toString();
+    timestampElement.dateTime = new Date(timestamp).toISOString();
     render(timestampElement);
 
     //const content = messageElement.querySelector<HTMLElement>(".chat-message-body");

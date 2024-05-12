@@ -11,6 +11,9 @@ router.post("/create", async (request, response) => {
   try {
     const io = request.app.get("io");
     const { id, description: finalDescription, finalNumberPlayers } = await Games.create(creatorId, description, number_players);
+    
+    io.of('/').adapter.rooms.set(id, new Set()); // Create a new room for the game for msging
+
     io.emit(GAME_CREATED, {
       gameId: id,
       description: finalDescription,
