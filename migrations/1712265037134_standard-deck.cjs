@@ -61,50 +61,50 @@ exports.up = (pgm) => {
           switch (suit) {
             case 0:
               if (value === 10) {
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 red')`);
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 red')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 red')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 red')`);
               } else if (value === 11) {
-                values.push(`(${suit}, ${type}, ${value}, 'reverse red')`);
-                values.push(`(${suit}, ${type}, ${value}, 'reverse red')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse red')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse red')`);
               } else {
-                values.push(`(${suit}, ${type}, ${value}, 'skip red')`);
-                values.push(`(${suit}, ${type}, ${value}, 'skip red')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip red')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip red')`);
               }
               break;
             case 1:
               if (value === 10) {
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 yellow')`);
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 yellow')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 yellow')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 yellow')`);
               } else if (value === 11) {
-                values.push(`(${suit}, ${type}, ${value}, 'reverse yellow')`);
-                values.push(`(${suit}, ${type}, ${value}, 'reverse yellow')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse yellow')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse yellow')`);
               } else {
-                values.push(`(${suit}, ${type}, ${value}, 'skip yellow')`);
-                values.push(`(${suit}, ${type}, ${value}, 'skip yellow')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip yellow')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip yellow')`);
               }
               break;
             case 2:
               if (value === 10) {
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 blue')`);
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 blue')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 blue')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 blue')`);
               } else if (value === 11) {
-                values.push(`(${suit}, ${type}, ${value}, 'reverse blue')`);
-                values.push(`(${suit}, ${type}, ${value}, 'reverse blue')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse blue')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse blue')`);
               } else {
-                values.push(`(${suit}, ${type}, ${value}, 'skip blue')`);
-                values.push(`(${suit}, ${type}, ${value}, 'skip blue')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip blue')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip blue')`);
               }
               break;
             default:
               if (value === 10) {
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 green')`);
-                values.push(`(${suit}, ${type}, ${value}, 'draw 2 green')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 green')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Draw 2 green')`);
               } else if (value === 11) {
-                values.push(`(${suit}, ${type}, ${value}, 'reverse green')`);
-                values.push(`(${suit}, ${type}, ${value}, 'reverse green')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse green')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Reverse green')`);
               } else {
-                values.push(`(${suit}, ${type}, ${value}, 'skip green')`);
-                values.push(`(${suit}, ${type}, ${value}, 'skip green')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip green')`);
+                values.push(`(${suit}, ${type}, ${value}, 'Skip green')`);
               }
               break;
           }
@@ -114,14 +114,14 @@ exports.up = (pgm) => {
   }
 
   // Adding wild cards
-  values.push(`(4, 2, 13, 'wild')`);
-  values.push(`(4, 2, 13, 'wild')`);
-  values.push(`(4, 2, 13, 'wild')`);
-  values.push(`(4, 2, 13, 'wild')`);
-  values.push(`(4, 2, 14, 'wild draw 4')`);
-  values.push(`(4, 2, 14, 'wild draw 4')`);
-  values.push(`(4, 2, 14, 'wild draw 4')`);
-  values.push(`(4, 2, 14, 'wild draw 4')`);
+  values.push(`(4, 2, 13, 'Wild')`);
+  values.push(`(4, 2, 13, 'Wild')`);
+  values.push(`(4, 2, 13, 'Wild')`);
+  values.push(`(4, 2, 13, 'Wild')`);
+  values.push(`(4, 2, 14, 'Wild draw 4')`);
+  values.push(`(4, 2, 14, 'Wild draw 4')`);
+  values.push(`(4, 2, 14, 'Wild draw 4')`);
+  values.push(`(4, 2, 14, 'Wild draw 4')`);
 
   const query = `${sql} ${values.join(",")}`;
 

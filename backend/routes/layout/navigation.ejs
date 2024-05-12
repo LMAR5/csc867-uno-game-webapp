@@ -24,10 +24,13 @@
       </div>
       <!-- Start desktop secondary menu segment; make sure we have an authenticated user -->
       <% if(locals.user) { %>
-      <div class="hidden md:block">
-        <div class="ml-4 flex items-center md:ml-6">
-          <a href="/auth/logout" class="menu-item mr-4">Sign out</a>
+      <div class="hidden md:block">        
+        <div class="ml-4 flex items-center md:ml-6">          
+          <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 mr-4">
+            <%= user.email %>
+          </span>
           <img class="h-8 w-8 rounded-full" src="https://gravatar.com/avatar/<%= user.gravatar %>" alt="<%= user.email %>">
+          <a href="/auth/logout" class="menu-item">Sign out</a>          
       </div>
       <% } %>
       <!-- End desktop secondary menu segment -->
