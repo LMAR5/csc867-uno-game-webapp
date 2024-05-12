@@ -449,10 +449,10 @@
     background-position-y: -17.6em;
   }
   .B {
-    background-position-y: -18.2em;
+    background-position-y: -26.45em;
   }
   .G {
-    background-position-y: -27.3em;
+    background-position-y: -35.2em;
   }
 
   /* TYPES: Number card, Action card, Wild card */
@@ -528,10 +528,143 @@
     background-position-x: -64.3em;
   }
   .yellowSkip {
-    background-position-x: -70em;
+    background-position-x: -70.7em;
   }
   .yellowRev {
     background-position-x: 0;
     background-position-y: -17.6em;
   }
+
+  /* Red cards */
+  .red1 {
+    background-position-x: -6.4em;
+  }
+  .red2 {
+    background-position-x: -12.85em;
+  }
+  .red3 {
+    background-position-x: -19.3em;
+  }
+  .red4 {
+    background-position-x: -25.7em;
+  }
+  .red5 {
+    background-position-x: -32.1em;
+  }
+  .red6 {
+    background-position-x: -38.5em;
+  }
+  .red7 {
+    background-position-x: -45em;
+  }
+  .red8 {
+    background-position-x: -51.4em;
+  }
+  .red9 {
+    background-position-x: -57.85em;
+  }
+  .red0 {
+    background-position-x: -64.3em;
+  }
+  .redDraw2 {
+    background-position-x: -70.7em;
+  }
+  .redSkip {
+    background-position-x: 0;
+    background-position-y: -26.45em;
+  }
+  .redRev {
+    background-position-x: -6.4em;
+    background-position-y: -26.45em;    
+  }
+  
+  /* Blue cards */
+  .blue1 {
+    background-position-x: -12.85em;
+  }
+  .blue2 {
+    background-position-x: -19.3em;
+  }
+  .blue3 {
+    background-position-x: -25.7em;
+  }
+  .blue4 {
+    background-position-x: -32.1em;
+  }
+  .blue5 {
+    background-position-x: -38.5em;
+  }
+  .blue6 {
+    background-position-x: -45em;
+  }
+  .blue7 {
+    background-position-x: -51.4em;
+  }
+  .blue8 {
+    background-position-x: -57.85em;
+  }
+  .blue9 {
+    background-position-x: -64.3em;
+  }
+  .blue0 {
+    background-position-x: -70.7em;
+  }
+  .blueDraw2 {
+    background-position-x: 0;
+    background-position-y: -35.2em;
+  }
+  .blueSkip {
+    background-position-x: -6.4em;
+    background-position-y: -35.2em;
+  }
+  .blueRev {
+    background-position-x: -12.85em;
+    background-position-y: -35.2em;
+  }
+
+  /* Green cards */
+  .green1 {
+    background-position-x: -19.3em;
+  }
+  .green2 {
+    background-position-x: -25.7em;
+  }
+  .green3 {
+    background-position-x: -32.1em;
+  }
+  .green4 {
+    background-position-x: -38.5em;
+  }
+  .green5 {
+    background-position-x: -45em;
+  }
+  .green6 {
+    background-position-x: -51.4em;
+  }
+  .green7 {
+    background-position-x: -57.85em;
+  }
+  .green8 {
+    background-position-x: -64.3em;
+  }
+  .green9 {
+    background-position-x: -70.7em;
+  }
+  .green0 {
+    background-position-x: 0;
+    background-position-y: -44em;
+  }
+  .greenDraw2 {
+    background-position-x: -6.4em;
+    background-position-y: -44em;
+  }
+  .greenSkip {
+    background-position-x: -12.85em;
+    background-position-y: -44em;
+  }
+  .greenRev {
+    background-position-x: -19.3em;
+    background-position-y: -44em;
+  }
+
 }

@@ -839,6 +839,18 @@ html,
   background-position-y: -8.8em;
 }
 
+.R {
+  background-position-y: -17.6em;
+}
+
+.B {
+  background-position-y: -26.45em;
+}
+
+.G {
+  background-position-y: -35.2em;
+}
+
 /* TYPES: Number card, Action card, Wild card */
 
 /* VALUES: 1,2,3,4,5,6,7,8,9,10 (draw),11 (reverse),12 (skip),13 (wild),14 (wild draw 4) */
@@ -847,6 +859,10 @@ html,
 
 .downCard {
   background-position-x: 0;
+}
+
+.black14 {
+  background-position-x: -38.5em;
 }
 
 /* Yellow cards */
@@ -863,10 +879,6 @@ html,
   background-position-x: -25.7em;
 }
 
-.yellow6 {
-  background-position-x: -32.1em;
-}
-
 .yellow7 {
   background-position-x: -38.5em;
 }
@@ -879,8 +891,63 @@ html,
   background-position-x: -51.4em;
 }
 
-.yellow0 {
-  background-position-x: -57.85em;
+/* Red cards */
+
+.red1 {
+  background-position-x: -6.4em;
+}
+
+.red3 {
+  background-position-x: -19.3em;
+}
+
+.red5 {
+  background-position-x: -32.1em;
+}
+
+.redSkip {
+  background-position-x: 0;
+  background-position-y: -26.45em;
+}
+
+.redRev {
+  background-position-x: -6.4em;
+  background-position-y: -26.45em;
+}
+
+/* Blue cards */
+
+.blue4 {
+  background-position-x: -32.1em;
+}
+
+.blue5 {
+  background-position-x: -38.5em;
+}
+
+.blueSkip {
+  background-position-x: -6.4em;
+  background-position-y: -35.2em;
+}
+
+/* Green cards */
+
+.green1 {
+  background-position-x: -19.3em;
+}
+
+.green8 {
+  background-position-x: -64.3em;
+}
+
+.greenSkip {
+  background-position-x: -12.85em;
+  background-position-y: -44em;
+}
+
+.greenRev {
+  background-position-x: -19.3em;
+  background-position-y: -44em;
 }
 
 *, ::before, ::after {
@@ -1216,6 +1283,10 @@ html,
   height: 100%;
 }
 
+.h-\[calc\(90vh-100px\)\] {
+  height: calc(90vh - 100px);
+}
+
 .min-h-full {
   min-height: 100%;
 }
@@ -1308,6 +1379,10 @@ html,
   flex-basis: 33.333333%;
 }
 
+.basis-1\/4 {
+  flex-basis: 25%;
+}
+
 .basis-1\/6 {
   flex-basis: 16.666667%;
 }
@@ -1318,6 +1393,10 @@ html,
 
 .basis-2\/4 {
   flex-basis: 50%;
+}
+
+.basis-3\/4 {
+  flex-basis: 75%;
 }
 
 .transform {
@@ -1340,8 +1419,8 @@ html,
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-.grid-cols-6 {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+.grid-cols-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -1358,6 +1437,10 @@ html,
 
 .flex-col-reverse {
   flex-direction: column-reverse;
+}
+
+.content-center {
+  align-content: center;
 }
 
 .items-end {
