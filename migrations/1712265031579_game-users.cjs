@@ -9,11 +9,13 @@ exports.up = (pgm) => {
   pgm.createTable(TABLE_NAME, {
     user_id: {
       type: "int",
+      references: "users",
     },
     game_id: {
       type: "int",
+      references: "games"
     },
-    seat: {
+    turn_order: {
       type: "int",
     },
   });

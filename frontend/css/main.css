@@ -31,7 +31,6 @@
     @apply text-white;
   }
 
-  
   /*
   Deck of CSS Cards
   by Jeff Yaus
@@ -418,14 +417,254 @@
     color: #cc0000;
   }
 
-      /* Error message display*/
-.error-message {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding: 0.75rem;
-  background-color: #b91c1c;
-  color: white;
-  text-align: center;
-  border-radius: 0.375rem;
-}
+  /* Error message display*/
+  .error-message {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+    background-color: #b91c1c;
+    color: white;
+    text-align: center;
+    border-radius: 0.375rem;
+  }
+
+  .uno-card {
+    height: 8.85em;
+    width: 6.4em;
+    background: #fff url("../images/uno_cards.png") no-repeat;
+    background-size: 1250% 800%;
+    border: 1px solid #000000;
+    border-radius: 0.5em;
+    box-shadow: 0 0 0.5em -0.15em #000;
+  }
+
+  /* SUITS: Wild, Yellow, Blue, Green */
+  .W {
+    background-position-y: 0;
+  }
+  .Y {
+    background-position-y: -8.8em;
+  }
+  .R {
+    background-position-y: -17.6em;
+  }
+  .B {
+    background-position-y: -26.45em;
+  }
+  .G {
+    background-position-y: -35.2em;
+  }
+
+  /* TYPES: Number card, Action card, Wild card */
+
+  /* VALUES: 1,2,3,4,5,6,7,8,9,10 (draw),11 (reverse),12 (skip),13 (wild),14 (wild draw 4) */
+  /* Wild cards */
+  .downCard {
+    background-position-x: 0;
+  }
+  .black13 {
+    background-position-x: -6.4em;
+  }
+  .yellow13 {
+    background-position-x: -12.85em;
+  }
+  .red13 {
+    background-position-x: -19.3em;
+  }
+  .blue13 {
+    background-position-x: -25.7em;
+  }
+  .green13 {
+    background-position-x: -32.1em;
+  }
+  .black14 {
+    background-position-x: -38.5em;
+  }
+  .yellow14 {
+    background-position-x: -45em;
+  }
+  .red14 {
+    background-position-x: -51.45em;
+  }
+  .blue14 {
+    background-position-x: -57.85em;
+  }
+  .green14 {
+    background-position-x: -64.25em;
+  }
+
+  /* Yellow cards */
+  .yellow1 {
+    background-position-x: 0;
+  }
+  .yellow2 {
+    background-position-x: -6.4em;
+  }
+  .yellow3 {
+    background-position-x: -12.85em;
+  }
+  .yellow4 {
+    background-position-x: -19.3em;
+  }
+  .yellow5 {
+    background-position-x: -25.7em;
+  }
+  .yellow6 {
+    background-position-x: -32.1em;
+  }
+  .yellow7 {
+    background-position-x: -38.5em;
+  }
+  .yellow8 {
+    background-position-x: -45em;
+  }
+  .yellow9 {
+    background-position-x: -51.4em;
+  }
+  .yellow0 {
+    background-position-x: -57.85em;
+  }
+  .yellowDraw2 {
+    background-position-x: -64.3em;
+  }
+  .yellowSkip {
+    background-position-x: -70.7em;
+  }
+  .yellowRev {
+    background-position-x: 0;
+    background-position-y: -17.6em;
+  }
+
+  /* Red cards */
+  .red1 {
+    background-position-x: -6.4em;
+  }
+  .red2 {
+    background-position-x: -12.85em;
+  }
+  .red3 {
+    background-position-x: -19.3em;
+  }
+  .red4 {
+    background-position-x: -25.7em;
+  }
+  .red5 {
+    background-position-x: -32.1em;
+  }
+  .red6 {
+    background-position-x: -38.5em;
+  }
+  .red7 {
+    background-position-x: -45em;
+  }
+  .red8 {
+    background-position-x: -51.4em;
+  }
+  .red9 {
+    background-position-x: -57.85em;
+  }
+  .red0 {
+    background-position-x: -64.3em;
+  }
+  .redDraw2 {
+    background-position-x: -70.7em;
+  }
+  .redSkip {
+    background-position-x: 0;
+    background-position-y: -26.45em;
+  }
+  .redRev {
+    background-position-x: -6.4em;
+    background-position-y: -26.45em;    
+  }
+  
+  /* Blue cards */
+  .blue1 {
+    background-position-x: -12.85em;
+  }
+  .blue2 {
+    background-position-x: -19.3em;
+  }
+  .blue3 {
+    background-position-x: -25.7em;
+  }
+  .blue4 {
+    background-position-x: -32.1em;
+  }
+  .blue5 {
+    background-position-x: -38.5em;
+  }
+  .blue6 {
+    background-position-x: -45em;
+  }
+  .blue7 {
+    background-position-x: -51.4em;
+  }
+  .blue8 {
+    background-position-x: -57.85em;
+  }
+  .blue9 {
+    background-position-x: -64.3em;
+  }
+  .blue0 {
+    background-position-x: -70.7em;
+  }
+  .blueDraw2 {
+    background-position-x: 0;
+    background-position-y: -35.2em;
+  }
+  .blueSkip {
+    background-position-x: -6.4em;
+    background-position-y: -35.2em;
+  }
+  .blueRev {
+    background-position-x: -12.85em;
+    background-position-y: -35.2em;
+  }
+
+  /* Green cards */
+  .green1 {
+    background-position-x: -19.3em;
+  }
+  .green2 {
+    background-position-x: -25.7em;
+  }
+  .green3 {
+    background-position-x: -32.1em;
+  }
+  .green4 {
+    background-position-x: -38.5em;
+  }
+  .green5 {
+    background-position-x: -45em;
+  }
+  .green6 {
+    background-position-x: -51.4em;
+  }
+  .green7 {
+    background-position-x: -57.85em;
+  }
+  .green8 {
+    background-position-x: -64.3em;
+  }
+  .green9 {
+    background-position-x: -70.7em;
+  }
+  .green0 {
+    background-position-x: 0;
+    background-position-y: -44em;
+  }
+  .greenDraw2 {
+    background-position-x: -6.4em;
+    background-position-y: -44em;
+  }
+  .greenSkip {
+    background-position-x: -12.85em;
+    background-position-y: -44em;
+  }
+  .greenRev {
+    background-position-x: -19.3em;
+    background-position-y: -44em;
+  }
+
 }
