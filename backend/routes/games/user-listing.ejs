@@ -1,0 +1,8 @@
+<template id="game_users_lst_template">
+    <%- include("user-list-item", { player: { id: -1, first_name: "", last_name: "", cardCount: 0 } }) %>
+</template>
+<div id="users_game_listing_<%= id %>" class="basis-2/4 flex flex-col">
+    <% users.forEach((player, idx)=> { %>        
+        <%- include("user-list-item", { player }) %>    
+    <% }) %>
+</div>

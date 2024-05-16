@@ -861,11 +861,55 @@ html,
   background-position-x: 0;
 }
 
+.black13 {
+  background-position-x: -6.4em;
+}
+
+.yellow13 {
+  background-position-x: -12.85em;
+}
+
+.red13 {
+  background-position-x: -19.3em;
+}
+
+.blue13 {
+  background-position-x: -25.7em;
+}
+
+.green13 {
+  background-position-x: -32.1em;
+}
+
 .black14 {
   background-position-x: -38.5em;
 }
 
+.yellow14 {
+  background-position-x: -45em;
+}
+
+.red14 {
+  background-position-x: -51.45em;
+}
+
+.blue14 {
+  background-position-x: -57.85em;
+}
+
+.green14 {
+  background-position-x: -64.25em;
+}
+
 /* Yellow cards */
+
+.yellow1 {
+  background-position-x: 0;
+}
+
+.yellow2 {
+  background-position-x: -6.4em;
+}
 
 .yellow3 {
   background-position-x: -12.85em;
@@ -877,6 +921,10 @@ html,
 
 .yellow5 {
   background-position-x: -25.7em;
+}
+
+.yellow6 {
+  background-position-x: -32.1em;
 }
 
 .yellow7 {
@@ -891,18 +939,67 @@ html,
   background-position-x: -51.4em;
 }
 
+.yellow0 {
+  background-position-x: -57.85em;
+}
+
+.yellowDraw2 {
+  background-position-x: -64.3em;
+}
+
+.yellowSkip {
+  background-position-x: -70.7em;
+}
+
+.yellowRev {
+  background-position-x: 0;
+  background-position-y: -17.6em;
+}
+
 /* Red cards */
 
 .red1 {
   background-position-x: -6.4em;
 }
 
+.red2 {
+  background-position-x: -12.85em;
+}
+
 .red3 {
   background-position-x: -19.3em;
 }
 
+.red4 {
+  background-position-x: -25.7em;
+}
+
 .red5 {
   background-position-x: -32.1em;
+}
+
+.red6 {
+  background-position-x: -38.5em;
+}
+
+.red7 {
+  background-position-x: -45em;
+}
+
+.red8 {
+  background-position-x: -51.4em;
+}
+
+.red9 {
+  background-position-x: -57.85em;
+}
+
+.red0 {
+  background-position-x: -64.3em;
+}
+
+.redDraw2 {
+  background-position-x: -70.7em;
 }
 
 .redSkip {
@@ -917,6 +1014,18 @@ html,
 
 /* Blue cards */
 
+.blue1 {
+  background-position-x: -12.85em;
+}
+
+.blue2 {
+  background-position-x: -19.3em;
+}
+
+.blue3 {
+  background-position-x: -25.7em;
+}
+
 .blue4 {
   background-position-x: -32.1em;
 }
@@ -925,8 +1034,38 @@ html,
   background-position-x: -38.5em;
 }
 
+.blue6 {
+  background-position-x: -45em;
+}
+
+.blue7 {
+  background-position-x: -51.4em;
+}
+
+.blue8 {
+  background-position-x: -57.85em;
+}
+
+.blue9 {
+  background-position-x: -64.3em;
+}
+
+.blue0 {
+  background-position-x: -70.7em;
+}
+
+.blueDraw2 {
+  background-position-x: 0;
+  background-position-y: -35.2em;
+}
+
 .blueSkip {
   background-position-x: -6.4em;
+  background-position-y: -35.2em;
+}
+
+.blueRev {
+  background-position-x: -12.85em;
   background-position-y: -35.2em;
 }
 
@@ -936,8 +1075,46 @@ html,
   background-position-x: -19.3em;
 }
 
+.green2 {
+  background-position-x: -25.7em;
+}
+
+.green3 {
+  background-position-x: -32.1em;
+}
+
+.green4 {
+  background-position-x: -38.5em;
+}
+
+.green5 {
+  background-position-x: -45em;
+}
+
+.green6 {
+  background-position-x: -51.4em;
+}
+
+.green7 {
+  background-position-x: -57.85em;
+}
+
 .green8 {
   background-position-x: -64.3em;
+}
+
+.green9 {
+  background-position-x: -70.7em;
+}
+
+.green0 {
+  background-position-x: 0;
+  background-position-y: -44em;
+}
+
+.greenDraw2 {
+  background-position-x: -6.4em;
+  background-position-y: -44em;
 }
 
 .greenSkip {
@@ -1107,20 +1284,16 @@ html,
   left: calc(50% - 4rem);
 }
 
+.right-0 {
+  right: 0px;
+}
+
 .top-0 {
   top: 0px;
 }
 
 .top-10 {
   top: 2.5rem;
-}
-
-.right-0 {
-  right: 0px;
-}
-
-.right-\[calc\(50\%-4rem\)\] {
-  right: calc(50% - 4rem);
 }
 
 .-z-10 {
@@ -1137,6 +1310,10 @@ html,
 
 .col-span-1 {
   grid-column: span 1 / span 1;
+}
+
+.col-span-4 {
+  grid-column: span 4 / span 4;
 }
 
 .float-right {
@@ -1285,10 +1462,6 @@ html,
 
 .h-full {
   height: 100%;
-}
-
-.h-\[calc\(90vh-100px\)\] {
-  height: calc(90vh - 100px);
 }
 
 .min-h-full {
@@ -1443,16 +1616,16 @@ html,
   flex-direction: column-reverse;
 }
 
+.place-content-center {
+  place-content: center;
+}
+
 .content-center {
   align-content: center;
 }
 
 .items-end {
   align-items: flex-end;
-}
-
-.place-content-center {
-  place-content: center;
 }
 
 .items-center {
@@ -1665,11 +1838,6 @@ html,
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
 
-.bg-gray-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-}
-
 .bg-green-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(22 101 52 / var(--tw-bg-opacity));
@@ -1832,11 +2000,6 @@ html,
   padding-bottom: 0.5rem;
 }
 
-.py-2\.5 {
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-}
-
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -1904,20 +2067,12 @@ html,
   padding-top: 1.25rem;
 }
 
-.text-left {
-  text-align: left;
-}
-
 .pt-\[10px\] {
   padding-top: 10px;
 }
 
-.pb-24 {
-  padding-bottom: 6rem;
-}
-
-.pt-10 {
-  padding-top: 2.5rem;
+.text-left {
+  text-align: left;
 }
 
 .text-center {
@@ -2043,6 +2198,11 @@ html,
   color: rgb(129 140 248 / var(--tw-text-opacity));
 }
 
+.text-neutral-50 {
+  --tw-text-opacity: 1;
+  color: rgb(250 250 250 / var(--tw-text-opacity));
+}
+
 .text-red-700 {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
@@ -2051,11 +2211,6 @@ html,
 .text-sky-600 {
   --tw-text-opacity: 1;
   color: rgb(2 132 199 / var(--tw-text-opacity));
-}
-
-.text-neutral-50 {
-  --tw-text-opacity: 1;
-  color: rgb(250 250 250 / var(--tw-text-opacity));
 }
 
 .text-white {
@@ -2153,14 +2308,6 @@ html,
   transition-duration: 150ms;
 }
 
-.duration-150 {
-  transition-duration: 150ms;
-}
-
-.ease-in-out {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -2171,6 +2318,14 @@ html,
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.duration-150 {
+  transition-duration: 150ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .\[mask-image\:radial-gradient\(100\%_100\%_at_top_right\2c white\2c transparent\)\] {
@@ -2327,10 +2482,6 @@ html,
 
 .focus-visible\:outline-green-600:focus-visible {
   outline-color: #16a34a;
-}
-
-.focus-visible\:outline-indigo-400:focus-visible {
-  outline-color: #818cf8;
 }
 
 .focus-visible\:outline-indigo-500:focus-visible {
@@ -2569,8 +2720,8 @@ html,
     flex: none;
   }
 
-  .lg\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .lg\:grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .lg\:items-center {

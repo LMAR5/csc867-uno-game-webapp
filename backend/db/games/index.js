@@ -34,7 +34,8 @@ const Sql = {
     ORDER BY game_cards.card_order`,
   GET_CURRENT_USERS_TURN: `SELECT u.id, u.email, u.first_name, u.last_name, gu.game_id, gu.turn_order FROM users u JOIN game_users gu ON gu.user_id = u.id JOIN games g ON g.id = gu.game_id AND g.current_turn = gu.turn_order WHERE g.id = $1`,
   GET_USER_COUNT: `SELECT COUNT(*) FROM game_users WHERE game_id=$1`,
-  SET_CURRENT_TURN: `UPDATE games SET current_turn=$1 WHERE id=$2`
+  SET_CURRENT_TURN: `UPDATE games SET current_turn=$1 WHERE id=$2`,
+  IS_CURRENT_PLAYER: `SELECT current_turn FROM games WHERE id=$1`
 };
 
 const create = async (creatorId, gameDescription, numberPlayers) => {
@@ -121,6 +122,10 @@ const getCurrentUserByGameId = async (gameId) => {
   }
 }
 
+const isCurrentPlayerTurn = (gameId, userId) => 
+  db.one(Sql.IS_CURRENT_PLAYER, [gameId])
+  .then(({ current_turn: playerId }) => playerId === userId);
+
 const join = async (gameId, userId) => {
   // This will throw if the user is in the game since I have chosen the `none` method:
   await db.none(Sql.IS_PLAYER_IN_GAME, [gameId, userId]);
@@ -200,5 +205,6 @@ export default {
   join,
   userCount,
   getGameById,
+  isCurrentPlayerTurn,
   initialize,
 };

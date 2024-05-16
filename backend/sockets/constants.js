@@ -6,3 +6,4 @@ export const GAME_USER_ADDED = "game:user_added";
 export const GAME_STATE_UPDATED = "game:state_updated";
 export const GAME_TEST = "game:test";
 export const USER_TEST = "user:test";
+export const USER_NOT_TURN = "user:not_turn";

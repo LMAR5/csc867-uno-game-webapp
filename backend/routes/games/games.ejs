@@ -2,25 +2,20 @@
 <div class="flex flex-row">
   <h1 class="text-3xl font-bold mr-2"><%= description %></h1>    
   <div class="content-center">
-    <h3>(<%= count %> / <%= number_players %> players)</h3>
+    <h3>(
+      <span id="num_joined_players_game_<%= id %>">
+        <%= count %> 
+      </span>
+      / <%= number_players %> players )</h3>
   </div>  
 </div>
 <div class="flex flex-row">
   <div class="flex flex-col basis-3/4">
-    <div class="flex flex-row mt-4">
-      <div class="basis-2/4 flex flex-col">
-        <% users.forEach((user, idx)=> { %>
-        <div>
-          [
-          <%= user.first_name.concat(' ',user.last_name) %>
-          ]: <img class="size-7 inline" src="/images/uno_hand.png" />
-          <%= user.cardCount %>
-        </div>
-        <% }) %>
-      </div>
+    <div class="flex flex-row mt-4">      
+      <%- include("user-listing") %>
       <div class="float-right">
         Current turn:
-        <span
+        <span id="current_turn_game_<%= id %>"
           class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10"
         >
           <%= user_turn[0].first_name.concat(' ',user_turn[0].last_name) %>
@@ -34,19 +29,23 @@
       </div>
     </div>
     <div class="flex flex-row my-4">
-      <h2 class="text-2xl font-bold mr-2">Your cards</h2>  
-      <button
-        type="submit"
-        class="rounded-md bg-sky-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 mr-2"
-      >
-        Play
-      </button>
-      <button
+      <h2 class="text-2xl font-bold mr-2">Your cards</h2>        
+      <form action="/games/<%= id %>/play" method="post" id="play-form">
+        <button
+          type="submit"
+          class="rounded-md bg-sky-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 mr-2"
+        >
+          Play
+        </button>
+      </form>
+      <form action="/games/<%= id %>/draw" method="post" id="draw-form">
+        <button
         type="submit"
         class="rounded-md bg-red-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 mr-2"
       >
-        Draw
-      </button>
+          Draw
+        </button>
+      </form>      
       <form action="/games/<%= id %>/test" method="post" id="test-form">
         <button
         type="submit"
@@ -59,64 +58,16 @@
     <fieldset class="mt-4">
       <div class="flex flex-row">
         <div class="basis-2/3">
-          <div class="grid grid-cols-5">
-            <label
-              class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2"
-            >
+          <%- include("card-listing") %>
+          <!-- <div class="grid grid-cols-5"> section level
+            individual card level          
+            <label class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2">
               <input id="1_yellow3" type="radio" name="size-choice" value="yellow3" class="sr-only" />
               <span class="pointer-events-none">
                 <div class="uno-card R red3"></div>
               </span>
-            </label>
-            <label
-              class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2"
-            >
-              <input type="radio" name="size-choice" value="" class="sr-only" />
-              <span class="pointer-events-none">
-                <div class="uno-card R redSkip"></div>
-              </span>
-            </label>
-            <label
-              class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2"
-            >
-              <input type="radio" name="size-choice" value="" class="sr-only" />
-              <span class="pointer-events-none">
-                <div class="uno-card Y yellow5"></div>
-              </span>
-            </label>
-            <label
-              class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2"
-            >
-              <input type="radio" name="size-choice" value="" class="sr-only" />
-              <span class="pointer-events-none">
-                <div class="uno-card B blueSkip"></div>
-              </span>
-            </label>
-            <label
-              class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2"
-            >
-              <input type="radio" name="size-choice" value="" class="sr-only" />
-              <span class="pointer-events-none">
-                <div class="uno-card Y yellow4"></div>
-              </span>
-            </label>
-            <label
-              class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2"
-            >
-              <input type="radio" name="size-choice" value="" class="sr-only" />
-              <span class="pointer-events-none">
-                <div class="uno-card G green8"></div>
-              </span>
-            </label>
-            <label
-              class="relative flex items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray mt-2"
-            >
-              <input type="radio" name="size-choice" value="" class="sr-only" />
-              <span class="pointer-events-none">
-                <div class="uno-card B blue5"></div>
-              </span>
-            </label>            
-          </div>
+            </label> 
+          </div>-->
         </div>
       </div>
     </fieldset>
