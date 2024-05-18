@@ -1,37 +1,56 @@
 <%- include('../layout/header-no-nav') %>
 
 <% if (locals.errorMessage) { %>
-  <div class="error-message">
-    <%= errorMessage %>
+<div class="error-message">
+  <%= errorMessage %>
+</div>
+<% } %>
+
+<div class="flex min-h-full justify-center">
+  <!-- Register Form Column -->
+  <div class="flex-2 flex flex-col justify-center sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <img class="mx-auto h-10 w-auto" src="/images/favicons/android-chrome-192x192.png" alt="It's me!" />
+      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+        Register for an account
+      </h2>
+    </div>
+
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <%- include('form', { format: "register" }) %>
+
+      <p class="mt-10 text-center text-sm text-gray-400">
+        Already have an account?
+        <a href="/auth/login" class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">Sign in here</a>
+      </p>
+    </div>
   </div>
-  <% } %>
-  
+  <!-- Game Description Column -->
+  <div class="flex-1 flex max-h items-center bg-gray-50 p-12 shadow-lg">
+    <div>
+      <h1 class="text-5xl font-bold leading-normal text-gray-900 pb-6">UNO</h1>
+      <h3 class="text-lg font-medium leading-6 text-gray-900">Play Guide</h3>
+      <p class="mt-2 text-base text-gray-500 pb-12">
+        Players start each round by dealing 7 cards to each player. The remaining cards are placed facedown,
+        and the top card of this stack is turned over next to it to start the game.
 
-<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <img
-      class="mx-auto h-10 w-auto"
-      src="/images/favicons/android-chrome-192x192.png"
-      alt="It's me!"
-    />
-    <h2
-      class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white"
-    >
-      Register for an account
-    </h2>
-  </div>
-
-  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <%- include('form', { format: "register" }) %>
-
-    <p class="mt-10 text-center text-sm text-gray-400">
-      Already have an account?
-      <a
-        href="/auth/login"
-        class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"
-        >Sign in here</a
-      >
-    </p>
+        A player can play a card on the discard pile that matches the top card of the pile in either color or symbol
+        (number or special card marker), or a wild card. Starting with the person to the dealer's left, players
+        take turns in a clockwise direction placing one or more cards on the discard pile. If a player cannot
+        play or chooses not to play even if they have a playable card, they must draw a card from the deck.
+        If the drawn card can be played, it can be played immediately before the next person's turn
+        (or it can be kept if the player chooses not to). The first person to get rid of all their cards wins the game.
+      </p>
+      <h3 class="text-lg font-medium leading-6 text-gray-900">Join Multiple Sessions</h3>
+      <p class="mt-2 text-base text-gray-500 pb-12">
+        Dive into diverse gaming experiences by joining multiple sessions simultaneously.
+      </p>
+      <h3 class="text-lg font-medium leading-6 text-gray-900">Talk to new people through chat</h3>
+      <p class="mt-2 text-base text-gray-500">
+        Our game’s chat feature opens up a world of interaction, enabling you to connect with
+        fellow gamers from around the world. Share emotions, build strategies, or simply make new friends.
+      </p>
+    </div>
   </div>
 </div>
 
