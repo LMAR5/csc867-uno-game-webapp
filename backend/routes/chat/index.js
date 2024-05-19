@@ -11,6 +11,7 @@ router.post("/:id", async (request, response) => {
 
   request.app
     .get("io")
+    .to(roomId) // Emitting to a specific room
     .emit(CHAT_MESSAGE, { roomId, message, senderEmail, gravatar, timestamp: new Date() });
 
   response.status(200).send();

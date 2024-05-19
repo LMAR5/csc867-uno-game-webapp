@@ -44,7 +44,7 @@ export default function handle(socket) {
       gamesList.appendChild(newGameElement);
 
       // join game on form submit
-      socket.emit('join_game', gameId);
+      // socket.emit('join_game', gameId);
     },
   );
 }
