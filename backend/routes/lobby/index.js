@@ -1,6 +1,6 @@
 import express from "express";
 
-import { Games } from "../../db/index.js";
+import { Games, Users } from "../../db/index.js";
 
 const router = express.Router();
 
@@ -9,8 +9,10 @@ router.get("/", async (request, response) => {
 
   try {
     const availableGames = await Games.available(userId);
-
-    response.render("lobby/lobby", { availableGames });
+    const userSocketId = await Users.getUserSocket(userId);
+    const lobbyUserSocketId = userSocketId.sid;
+        
+    response.render("lobby/lobby", { availableGames, lobbyUserSocketId });
   } catch (error) {
     console.error(error);
     response.render("lobby/lobby", { availableGames: [] });

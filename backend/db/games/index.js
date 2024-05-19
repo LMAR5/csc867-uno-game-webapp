@@ -32,10 +32,15 @@ const Sql = {
     SELECT * FROM game_cards, standard_deck_cards
     WHERE game_cards.game_id=$1 AND game_cards.card_id=standard_deck_cards.id
     ORDER BY game_cards.card_order`,
+  GET_CARDS_FROM_USER: `SELECT * FROM game_cards gc, standard_deck_cards sdc WHERE gc.game_id=$1 AND gc.card_id=sdc.id AND gc.user_id=$2 ORDER BY gc.card_order`,
   GET_CURRENT_USERS_TURN: `SELECT u.id, u.email, u.first_name, u.last_name, gu.game_id, gu.turn_order FROM users u JOIN game_users gu ON gu.user_id = u.id JOIN games g ON g.id = gu.game_id AND g.current_turn = gu.turn_order WHERE g.id = $1`,
   GET_USER_COUNT: `SELECT COUNT(*) FROM game_users WHERE game_id=$1`,
   SET_CURRENT_TURN: `UPDATE games SET current_turn=$1 WHERE id=$2`,
-  IS_CURRENT_PLAYER: `SELECT current_turn FROM games WHERE id=$1`
+  IS_CURRENT_PLAYER: `SELECT current_turn FROM games WHERE id=$1`,
+  GET_USER_TURN_IN_GAME: `SELECT gu.turn_order FROM users u JOIN game_users gu ON gu.user_id = u.id WHERE gu.game_id=$1 AND u.id=$2`,
+  IS_CARD_PLAY_VALID: `SELECT COUNT(*) FROM (SELECT p_cards.* FROM standard_deck_cards p_cards WHERE p_cards.id = $1) pc JOIN (SELECT d_cards.* FROM standard_deck_cards d_cards WHERE d_cards.id = $2) dc ON pc.suit = dc.suit or pc.value = dc.value`,
+  GET_TOP_DISCARD_CARD: `SELECT * FROM game_cards gc JOIN standard_deck_cards sdc ON sdc.id = gc.card_id WHERE gc.game_id=$1 AND gc.status='discard' ORDER BY gc.card_order DESC LIMIT 1`,
+  DRAW_ONE_CARD: `SELECT * FROM game_cards gc, standard_deck_cards sdc WHERE gc.game_id=$1 AND gc.user_id IS NULL AND gc.status = 'deck' AND gc.card_id=sdc.id ORDER BY gc.card_order LIMIT 1`
 };
 
 const create = async (creatorId, gameDescription, numberPlayers) => {
@@ -44,7 +49,7 @@ const create = async (creatorId, gameDescription, numberPlayers) => {
     const { id, description, number_players } = await db.one(Sql.CREATE, [
       newGameSocketId,
       creatorId,
-      gameDescription || "placeholder",
+      gameDescription || "placeholder",      
       numberPlayers,
     ]);    
     let finalDescription = description;
@@ -76,11 +81,13 @@ const get = async (gameId) => {
     let playerCards = cards.filter((card) => card.user_id === item.id );    
     userData.push({ ...item, cards: playerCards, cardCount: playerCards.length });
   });
+  let firstDiscardCard = cards.filter((card) => card.status === 'discard');
   
   return {
     ...game,
     users: userData,
     user_turn: curr_turn,
+    first_discard: firstDiscardCard[0],
   };
 };
 
@@ -122,9 +129,98 @@ const getCurrentUserByGameId = async (gameId) => {
   }
 }
 
-const isCurrentPlayerTurn = (gameId, userId) => 
-  db.one(Sql.IS_CURRENT_PLAYER, [gameId])
-  .then(({ current_turn: playerId }) => playerId === userId);
+const getCardsByUser = async (gameId, userId) => {
+  const userCards = await db.any(Sql.GET_CARDS_FROM_USER, [gameId, userId]);
+  if (userCards === null) {
+    throw "Couldn't find cards for the provided user";
+  } else {
+    return userCards;
+  }
+}
+
+const getHandsByGame = async (gameId) => {
+  const hands = await db.any(Sql.GET_CARDS, [gameId]);
+  if (hands === null) {
+    throw "No cards found in this game"
+  } else {
+    return {
+      hands: hands.reduce((item, entry) => {
+        if (entry.user_id !== null) {
+          item[entry.user_id] = item[entry.user_id] || []
+          item[entry.user_id].push(entry)
+        }
+        return item;
+      }, {})
+    }
+  }
+}
+
+const drawOneCardFromDeck = async (gameId) => {
+  const newCard = await db.one(Sql.DRAW_ONE_CARD, [gameId]);
+  if (newCard === null) {
+    throw "No new card found in deck";
+  } else {
+    return newCard;
+  }
+}
+
+const dealCardToPlayer = (userId, newCardId, gameId, currPlayerHandLength) => {
+  const dealtCard = {
+    user_id: userId,
+    game_id: gameId,
+    card_id: newCardId,
+    card_order: currPlayerHandLength + 1,
+    status: 'player'
+  }
+
+  const columns = new pgp.helpers.ColumnSet([
+    "user_id",
+    "?game_id",
+    "?card_id",
+    "card_order",
+    "status",
+  ]);
+
+  const condition = pgp.as.format('WHERE card_id = ${card_id} AND game_id = ${game_id}', dealtCard);
+  const query = pgp.helpers.update(dealtCard, columns, "game_cards") + condition;
+  return db.none(query).then((_) => dealtCard);
+}
+
+const getUserTurnInGame = async (gameId, userId) => {
+  const turnUser = await db.one(Sql.GET_USER_TURN_IN_GAME, [gameId, userId]);
+  if (turnUser === null) {
+    return "No turn of user in game";
+  } else {
+    return turnUser;
+  }
+}
+
+const getTopDiscardCard = async (gameId) => {
+  const discardCard = await db.one(Sql.GET_TOP_DISCARD_CARD, [gameId]);
+  if (discardCard === null) {
+    return "No discard pile found";
+  } else {
+    return discardCard;
+  }
+}
+
+const isGameInitialized = async (gameId) => {  
+  const gameStarted = await db.any(Sql.GET_CARDS, [gameId]);
+  if (gameStarted.length === 0) {
+    return false;
+  } else {
+    return true;
+  }  
+}
+
+const isCardPlayValid = (playerCardId, discardCardId) => 
+  db.one(Sql.IS_CARD_PLAY_VALID, [playerCardId, discardCardId]).then(({ count }) => parseInt(count) === 1);
+
+const isCurrentPlayerTurn = async (gameId, userId) => {
+  const { turn_order: userTurn } = await getUserTurnInGame(gameId, userId);  
+  const result = await db.one(Sql.IS_CURRENT_PLAYER, [gameId]).then(({ current_turn: playerTurn }) => playerTurn === userTurn);  
+  return result;
+}  
 
 const join = async (gameId, userId) => {
   // This will throw if the user is in the game since I have chosen the `none` method:
@@ -198,6 +294,16 @@ const initialize = async (gameId) => {
 
 const getGameById = (gameId) => db.one(Sql.GET_GAME, gameId);
 
+const isPlayerInGame = async (gameId, userId) => {
+  const result = await db.oneOrNone(Sql.IS_PLAYER_IN_GAME, [gameId, userId]);
+
+  if (result === null) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 export default {
   create,
   get,
@@ -207,4 +313,12 @@ export default {
   getGameById,
   isCurrentPlayerTurn,
   initialize,
+  isPlayerInGame,
+  isCardPlayValid,
+  getTopDiscardCard,
+  drawOneCardFromDeck,
+  dealCardToPlayer,
+  getCardsByUser,
+  getHandsByGame,
+  isGameInitialized
 };

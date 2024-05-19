@@ -147,6 +147,7 @@
 
     <%- include("game-listing") %>
   </div>
+  <input type="hidden" id="lobby-user-socket-id" name="lobby-user-socket-id" value="<%= lobbyUserSocketId %>" />
   <div class="basis-1/3"><%- include("../chat/chat") %></div>
 </div>
 <%- include('../layout/footer') %>
