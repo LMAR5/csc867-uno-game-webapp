@@ -1537,6 +1537,10 @@ html,
   flex: 1 1 0%;
 }
 
+.flex-2 {
+  flex: 2 1 0%;
+}
+
 .flex-auto {
   flex: 1 1 auto;
 }
@@ -2090,6 +2094,12 @@ html,
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
+}
+
+
+.text-5xl {
+  font-size: 2.5rem;
+  line-height: 2.8rem;
 }
 
 .text-base {
