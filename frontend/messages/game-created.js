@@ -29,13 +29,19 @@ export default function handle(socket) {
       liElement.dataset.gameId = gameId.toString();
 
       //const img = newGameElement.querySelector<HTMLImageElement>("img");
-      const img = newGameElement.querySelector("img"); // HTMLImageElement
+      const img = newGameElement.querySelector("img#user_img"); // HTMLImageElement
       img.src = `https://gravatar.com/avatar/${creatorGravatar}`;
       img.alt = `${creatorEmail.substring(0, creatorEmail.indexOf("@"))}'s gravatar`;
 
       //const descriptionElement = newGameElement.querySelector<HTMLElement>(".game-description");
-      const descriptionElement = newGameElement.querySelector(".game-description"); // HTMLElement
-      descriptionElement.textContent = description;
+      const descriptionElement = newGameElement.querySelector("p#game_description"); // HTMLElement
+      descriptionElement.innerText = description;
+
+      const emailCreatorElement = newGameElement.querySelector("p#creator_email");
+      emailCreatorElement.innerText = creatorEmail.substring(0, creatorEmail.indexOf("@"));
+
+      const numberPlayersElement = newGameElement.querySelector("span#number_players_game");
+      numberPlayersElement.innerText = "1 out of ".concat(number_players, " Playing (Waiting for more)");
 
       //const joinForm = newGameElement.querySelector<HTMLFormElement>("form");
       const joinForm = newGameElement.querySelector("form"); // HTMLFormElement

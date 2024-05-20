@@ -10,12 +10,13 @@ router.get("/", async (request, response) => {
   try {
     const availableGames = await Games.available(userId);
     const userSocketId = await Users.getUserSocket(userId);
+    const rejoinGames = await Games.getGamesToRejoin(userId);    
     const lobbyUserSocketId = userSocketId.sid;
         
-    response.render("lobby/lobby", { availableGames, lobbyUserSocketId });
+    response.render("lobby/lobby", { availableGames, lobbyUserSocketId, rejoinGames });
   } catch (error) {
     console.error(error);
-    response.render("lobby/lobby", { availableGames: [] });
+    response.render("lobby/lobby", { availableGames: [], rejoinGames: [], lobbyUserSocketId: "" });
   }
 });
 

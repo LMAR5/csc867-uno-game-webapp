@@ -1,7 +1,7 @@
 import express from "express";
 
 import { Games, Users } from "../../db/index.js";
-import { GAME_CREATED, GAME_REMOVED, GAME_START, GAME_TEST, GAME_USER_ADDED, USER_TEST, USER_GAME_STARTED, USER_NOT_TURN, USER_NOT_IN_GAME, GAME_CARD_VALIDATION, USER_DRAW, GAME_USER_DRAW, USER_GAME_NOT_INIT } from "../../sockets/constants.js";
+import { GAME_CREATED, GAME_REMOVED, GAME_START, GAME_TEST, GAME_USER_ADDED, USER_TEST, USER_GAME_STARTED, USER_NOT_TURN, USER_NOT_IN_GAME, GAME_CARD_VALIDATION, USER_DRAW, GAME_USER_DRAW, USER_GAME_NOT_INIT, USER_AFTER_PLAY, GAME_AFTER_PLAY, GAME_WINNER, GAME_SKIP_CARD } from "../../sockets/constants.js";
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.post("/:id/test", async (request, response) => {
 
   const io = request.app.get("io");
   
-  //Emits a msg to a specific user from userSocketId or gameSocketId (console)
+  // Emits a test msg to a specific user
   io.to(userSocketId).emit(USER_TEST, {
     source: "User socket",
     gameId,
@@ -21,6 +21,7 @@ router.post("/:id/test", async (request, response) => {
     userSocketId,
     gameSocketId,
   });
+  // Emits a test msg to all users in the same game room
   io.to(gameSocketId).emit(GAME_TEST, {
     source: "Game socket",
     gameId,
@@ -37,7 +38,7 @@ router.post("/create", async (request, response) => {
   const { description, number_players } = request.body;
   try {
     const io = request.app.get("io");
-    const { id, description: finalDescription, finalNumberPlayers } = await Games.create(creatorId, description, number_players);
+    const { id, description: finalDescription, numberPlayers: finalNumberPlayers } = await Games.create(creatorId, description, number_players);
     io.emit(GAME_CREATED, {
       gameId: id,
       description: finalDescription,
@@ -53,16 +54,29 @@ router.post("/create", async (request, response) => {
   }
 });
 
+router.get("/:id/game-end", async (request, response) => {  
+  const { id } = request.params;    
+  const gameWon = await Games.getGameById(id);
+  const playerWinner = await Games.getWinnerByGameId(id);  
+  response.render("games/game-end", { winner: playerWinner, game: gameWon });
+});
+
 router.get("/:id", async (request, response) => {
-  const { id } = request.params;
+  const { id } = request.params;  
   const { id: userId } = request.session.user;
   try {    
+    // Check if there is already a winner
+    const isGameWinner = await Games.isThereWinnerByGameId(id);
+    if (isGameWinner) {
+      response.redirect(`/games/${id}/game-end`);
+      return;
+    }
     // Check if user belongs to this game session/room
     const isPlayerInGame = await Games.isPlayerInGame(id, userId);
     if (!isPlayerInGame) {
       // Reaload lobby page if player not in the game
       response.redirect("/lobby");
-    }
+    }    
     const gameData = await Games.get(id);
     const userSocketId = await Users.getUserSocket(userId);
     gameData.user_socket_id = userSocketId.sid;
@@ -75,7 +89,7 @@ router.get("/:id", async (request, response) => {
 });
 
 router.post("/:id/play", async (request, response) => {
-  const { id: gameId } = request.params;
+  const { id: gameId } = request.params;  
   const { id: userId } = request.session.user;
   const playerCardId = request.body.cardId;
   try {
@@ -107,7 +121,7 @@ router.post("/:id/play", async (request, response) => {
       return;
     }
 
-    // Validate if it's a valid card
+    // Check if it's a valid play
     const topDiscardCard = await Games.getTopDiscardCard(gameId);
     const isCardPlayedValid = await Games.isCardPlayValid(playerCardId, topDiscardCard.id);
     if (!isCardPlayedValid) {
@@ -120,20 +134,79 @@ router.post("/:id/play", async (request, response) => {
       });
       response.status(200).send();
       return;
-    } else {
-      // Temporal emit.
-      io.to(userSocketId).emit(GAME_CARD_VALIDATION, {
-        source: "User socket",
-        msg: "Valid play. Good job!",
+    }
+    const { game_socket_id: gameSocketId } = await Games.getGameById(gameId);
+    let turnUpdates = 1;
+    // Check if it's a skip card
+    const isCardSkipType = await Games.isSkipCard(playerCardId);
+    if (isCardSkipType) {
+      turnUpdates += 1;
+      io.to(gameSocketId).emit(GAME_SKIP_CARD, { 
+        source: "Game socket",
+        msg: "Skip card has been played!",
         gameId,
         userId
       });
+    }
+    // Check if it's a draw 2 card to affect next player (Pending)
+    // Move the player's card from player's hand to game's discard pile
+    await Games.addNewTopDiscardCard(topDiscardCard.card_order, gameId, playerCardId);    
+    // Update game's current turn
+    if (turnUpdates > 1) {
+      Games.updateGameCurrentTurn(1, gameId, userId).then(result => {
+        Games.updateGameCurrentTurn(2, gameId, userId).then(result2 => {
+          return;
+        });
+      });      
+    } else {
+      await Games.updateGameCurrentTurn(1, gameId, userId);
+    }    
+    // Get updated hand for user socket emit
+    const playerHand = await Games.getCardsByUser(gameId, userId);
+    // Check if player won
+    if (playerHand.length === 0) {      
+      await Games.setWinnerByGameId(userId, gameId);
+      // Game socket to let everybody knows there is a winner.
+      const userWinner = await Users.getUserById(userId);
+      io.to(gameSocketId).emit(GAME_WINNER, { 
+        source: "Game socket",
+        winner: userWinner,
+        gameId,
+        winnerId: userId
+      });
       response.status(200).send();
       return;
-    }
-    // If it's a valid card, proceed with play
-    // Move the player's card from player's hand to room's discard pile
-    // Replace Top discard card
+    }    
+    // User socket to update player's hand
+    io.to(userSocketId).emit(USER_AFTER_PLAY, {
+      source: "User socket",
+      hand: playerHand,
+      gameId,
+      playerId: userId
+    });
+    // Game socket to: [1] replace top discard card, [2] update player's card count, [3] next turn
+    const newTopDiscardCard = await Games.getTopDiscardCard(gameId);
+    const gameInfo = await Games.get(gameId);    
+    const currentPlayer = await Games.getCurrentUserByGameId(gameId);
+    let playersLst = [];
+    // List of players with their card count updated
+    gameInfo.users.forEach((item) => {
+      playersLst.push({
+        id: item.id,
+        first_name: item.first_name,
+        last_name: item.last_name,
+        cardCount: item.cardCount
+      });
+    });    
+    // Game socket
+    io.to(gameSocketId).emit(GAME_AFTER_PLAY, { 
+      source: "Game socket",
+      discardCard: newTopDiscardCard,
+      gameHands: playersLst,
+      currentTurn: currentPlayer,
+      gameId,
+      playerId: userId
+    });
 
     response.status(200).send();
   } catch (error) {
@@ -181,7 +254,7 @@ router.post("/:id/draw", async (request, response) => {
     await Games.dealCardToPlayer(userId, newCard.id, gameId, playerCurrentHand.length);
 
     // Broadcast state of game
-    // - Update [1] list of cards and [2] the num of cards for the user who drew (User socket)
+    // Update [1] list of cards and [2] the num of cards for the user who drew (User socket)
     const newPlayerHand = await Games.getCardsByUser(gameId, userId);    
     io.to(userSocketId).emit(USER_DRAW, { 
       source: "User socket",
@@ -189,8 +262,8 @@ router.post("/:id/draw", async (request, response) => {
       gameId,
       playerId: userId
     });
-    // - Update number of cards for other users to see (Game socket)
-    const { game_socket_id: gameSocketId } = await Games.getGameById(gameId);    
+    // Update number of cards for other users to see (Game socket)
+    const { game_socket_id: gameSocketId } = await Games.getGameById(gameId);
     const gameInfo = await Games.get(gameId);
     let hands = [];
     gameInfo.users.forEach((item) => {

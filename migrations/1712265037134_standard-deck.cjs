@@ -117,14 +117,14 @@ exports.up = (pgm) => {
   }
 
   // Adding wild cards
-  values.push(`(4, 2, 13, 'Wild', 'W yellow13')`);
-  values.push(`(4, 2, 13, 'Wild', 'W red13')`);
-  values.push(`(4, 2, 13, 'Wild', 'W blue13')`);
-  values.push(`(4, 2, 13, 'Wild', 'W green13')`);
-  values.push(`(4, 2, 14, 'Wild draw 4', 'W yellow14')`);
-  values.push(`(4, 2, 14, 'Wild draw 4', 'W red14')`);
-  values.push(`(4, 2, 14, 'Wild draw 4', 'W blue14')`);
-  values.push(`(4, 2, 14, 'Wild draw 4', 'W green14')`);
+  values.push(`(0, 2, 13, 'Wild red', 'W red13')`);
+  values.push(`(1, 2, 13, 'Wild yellow', 'W yellow13')`);  
+  values.push(`(2, 2, 13, 'Wild blue', 'W blue13')`);
+  values.push(`(3, 2, 13, 'Wild green', 'W green13')`);
+  values.push(`(0, 2, 14, 'Wild draw 4 red', 'W red14')`);
+  values.push(`(1, 2, 14, 'Wild draw 4 yellow', 'W yellow14')`);  
+  values.push(`(2, 2, 14, 'Wild draw 4 blue', 'W blue14')`);
+  values.push(`(3, 2, 14, 'Wild draw 4 green', 'W green14')`);
 
   const query = `${sql} ${values.join(",")}`;
 

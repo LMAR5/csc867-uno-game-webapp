@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { USER_GAME_STARTED, USER_NOT_TURN, USER_NOT_IN_GAME, USER_TEST, GAME_CARD_VALIDATION, USER_DRAW, USER_GAME_NOT_INIT } from "../../backend/sockets/constants";
+import { USER_GAME_STARTED, USER_NOT_TURN, USER_NOT_IN_GAME, USER_TEST, GAME_CARD_VALIDATION, USER_DRAW, USER_GAME_NOT_INIT, USER_AFTER_PLAY } from "../../backend/sockets/constants";
 import { addCardToList, generateNotTurnAlert, getGameRadioValues } from "./gameplay-helpers";
 
 const getCardRadioValue = () => {
@@ -55,7 +55,9 @@ const checkButtonPlayerForm = () => {
                             body: JSON.stringify({ 
                                 cardId: cardValue
                             }),
-                        }).then(_ => console.log(`Fetched ${url}`));
+                        });
+                        playForm.reset();
+                        resetSelectedCardLabel();
                         break;
                 }
             }
@@ -123,10 +125,17 @@ const configure = (userSocketId) => {
     // });
     
     userSocket.on(USER_DRAW, ({ source, hand, gameId, playerId }) => {
-        console.log({ event: USER_DRAW, source, hand, gameId, playerId }); 
-        updateCardsInPlayerHand(gameId, playerId, hand);        
+        console.log({ event: USER_DRAW, source, hand, gameId, playerId });
+        updateCardsInPlayerHand(gameId, playerId, hand);
         getGameRadioValues();
     });
+
+    userSocket.on(USER_AFTER_PLAY, ({ source, hand, gameId, playerId }) => {
+        console.log({ event: USER_AFTER_PLAY, source, hand, gameId, playerId }); 
+        updateCardsInPlayerHand(gameId, playerId, hand);
+        getGameRadioValues();
+    });
+
     getGameRadioValues();
 }
 

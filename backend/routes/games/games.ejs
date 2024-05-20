@@ -7,7 +7,12 @@
         <%= count %> 
       </span>
       / <%= number_players %> players )</h3>
-  </div>  
+  </div>
+  <div class="content-center ml-3">
+    <span id="current_status_game_<%= id %>" class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+      <%= status %>
+    </span>
+  </div>
 </div>
 <div class="flex flex-row">
   <div class="flex flex-col basis-3/4">

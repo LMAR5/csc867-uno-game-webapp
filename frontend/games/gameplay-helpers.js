@@ -7,6 +7,7 @@ const addTopDiscardCard = (gameId, cardStyle) => {
         console.error("Discard card not found");
         return;
     }
+    discardCard.innerHTML = "";    
     const newDiv = document.createElement("div");
     newDiv.className = "uno-card".concat(' ', cardStyle);
     discardCard.appendChild(newDiv);
