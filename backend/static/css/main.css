@@ -1951,6 +1951,13 @@ html,
   background-color: rgb(255 255 255 / 0.05);
 }
 
+<<<<<<<<< Temporary merge branch 1
+=========
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-40 {
   --tw-bg-opacity: 0.4;
 }
@@ -2011,6 +2018,12 @@ html,
 
 .p-4 {
   padding: 1rem;
+}
+
+<<<<<<<<< Temporary merge branch 1
+=========
+.p-2 {
+  padding: 0.5rem;
 }
 
 .p-5 {
