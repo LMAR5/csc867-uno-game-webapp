@@ -1,0 +1,6 @@
+<label id="game_<%= id %>_user_<%= card.user_id %>_card_<%= card.id %>_label" class="relative flex items-center justify-center p-2 hover:bg-gray-50 hover:ring-2 hover:ring-red-500 cursor-pointer bg-gray mt-2">
+    <input id="game_<%= id %>_user_<%= card.user_id %>_card_<%= card.id %>" type="radio" name="game_radio_values" placeholder="<%= card.name %>" value="<%= card.id %>" class="sr-only" />
+    <span class="pointer-events-none">
+        <div class="uno-card <%= card.style %>"></div>
+    </span>
+</label>
