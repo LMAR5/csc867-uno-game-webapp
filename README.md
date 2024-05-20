@@ -1,4 +1,4 @@
-# Term Project Example
+# Term Project
 
 - Team: I
 - Game: Uno
@@ -31,7 +31,7 @@
 | Back-end  | JavaScript (NodeJS)  |
 | Database  | PostgreSQL |
 | Project Management  | [GitHub Projects](https://github.com/orgs/sfsu-csc-667-spring-2024-roberts/projects/8)  |
-| Knowledge Database | GitHub Wiki |
+| Knowledge Database | [GitHub Wiki](https://github.com/sfsu-csc-667-spring-2024-roberts/term-project-team-i-uno/wiki) |
 | Documents Storage | OneDrive |
 
 ## Wireframes
