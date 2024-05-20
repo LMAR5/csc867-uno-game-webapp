@@ -1,0 +1,19 @@
+<template id="game_cards_lst_template">
+    <%- include("card-list-item", { card: { id: -1, user_id: -1, value: 0, style: "" }, id: -1 }) %>
+</template>
+<div id="cards_list_game_<%= id %>" class="grid grid-cols-5">
+    <% if (users[0].cards.length > 0) { %>
+        <% users.forEach((player, idx)=> { %>
+            <% if (player.id == screen_user_id) { %>
+                <% player.cards.forEach((card, idxc) => { %>
+                    <%- include("card-list-item", { card, id }) %>
+                <% }) %>
+            <% } %>            
+    <% }) %>
+    <% } else { %>
+        <%- include("card-list-item", { card: { id: -1, user_id: -1, value: 0, style: "W downCard" }, id: -1 }) %>
+        <div class="relative grid col-span-4 items-center justify-center hover:bg-gray-50 cursor-pointer bg-gray ml-4">
+            <p>Once the game start, you'll see your cards here.</p>
+        </div>
+    <% } %>
+</div>

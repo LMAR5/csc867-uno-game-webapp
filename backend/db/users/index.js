@@ -8,6 +8,7 @@ const Sql = {
   EXISTS: "SELECT id FROM users WHERE email=$1",
   // Note that this is ONLY for use in our backend (since it returns the password)
   FIND: "SELECT * FROM users WHERE email=$1",
+  GET_USER_BY_ID: "SELECT * FROM users WHERE id=$1",
   GET_USER_SOCKET: "SELECT sid FROM session WHERE sess->'user'->>'id'='$1' ORDER BY expire DESC LIMIT 1",
 };
 
@@ -36,11 +37,30 @@ const find = async (email) => {
   }
 };
 
-const getUserSocket = (user_id) => db.one(Sql.GET_USER_SOCKET, [parseInt(user_id)]);
+const getUserById = async (user_id) => {
+  const result = await db.oneOrNone(Sql.GET_USER_BY_ID, [user_id]);
+
+  if (result === null) {
+    throw "User with that ID not found";
+  } else {
+    return result;
+  }
+};
+
+const getUserSocket = async (user_id) => {
+  const result = await db.oneOrNone(Sql.GET_USER_SOCKET, [parseInt(user_id)]);
+
+  if (result === null) {
+    throw "User Socket with that ID not found";
+  } else {
+    return result;
+  }
+};
 
 export default {
   create,
   exists,
   find,
+  getUserById,
   getUserSocket,
 };
