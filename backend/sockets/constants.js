@@ -13,6 +13,7 @@ export const USER_DRAW = "user:card_draw";
 export const USER_GAME_STARTED = "user:game_started";
 export const USER_GAME_NOT_INIT = "user:game_not_init";
 export const USER_TEST = "user:test";
+export const CHAT_MESSAGE_LOBBY = "chat:message_lobby";
 export const USER_NOT_TURN = "user:not_turn";
 export const USER_NOT_IN_GAME = "user:not_in_game";
 export const USER_AFTER_PLAY = "user:after_play";

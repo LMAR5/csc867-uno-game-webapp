@@ -1000,11 +1000,6 @@ html,
   background-position-y: -26.45em;
 }
 
-.redRev {
-  background-position-x: -6.4em;
-  background-position-y: -26.45em;
-}
-
 /* Blue cards */
 
 .blue1 {
@@ -1289,6 +1284,14 @@ html,
   top: 2.5rem;
 }
 
+.right-64 {
+  right: 16rem;
+}
+
+.top-4 {
+  top: 1rem;
+}
+
 .-z-10 {
   z-index: -10;
 }
@@ -1527,6 +1530,10 @@ html,
 
 .w-screen {
   width: 100vw;
+}
+
+.w-64 {
+  width: 16rem;
 }
 
 .min-w-0 {
@@ -1814,6 +1821,10 @@ html,
   border-top-width: 1px;
 }
 
+.border-l {
+  border-left-width: 1px;
+}
+
 .border-dashed {
   border-style: dashed;
 }
@@ -1831,6 +1842,11 @@ html,
 .border-neutral-50 {
   --tw-border-opacity: 1;
   border-color: rgb(250 250 250 / var(--tw-border-opacity));
+}
+
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
 .bg-blue-50 {
@@ -1926,6 +1942,11 @@ html,
   background-color: rgb(255 255 255 / 0.05);
 }
 
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-40 {
   --tw-bg-opacity: 0.4;
 }
@@ -1986,6 +2007,10 @@ html,
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
 }
 
 .p-5 {

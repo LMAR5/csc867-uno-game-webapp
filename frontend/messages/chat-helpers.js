@@ -1,23 +1,9 @@
-//import { Socket } from "socket.io-client";
 import { format, render } from "timeago.js";
 
-import { CHAT_MESSAGE, CHAT_MESSAGE_LOBBY } from "../../backend/sockets/constants";
+const generateMsg = (message, senderEmail, gravatar, timestamp, messageAreaName) => {
 
-// export type ChatMessage = {
-//   roomId: string;
-//   message: string;
-//   senderEmail: string;
-//   gravatar: string;
-//   timestamp: number;
-// };
-
-//const messageArea = document.querySelector<HTMLElement>("#chat-message-area");
-//const messageTemplate = document.querySelector<HTMLTemplateElement>("#chat-message-template");
-const messageArea = document.querySelector("#chat-message-area-lobby"); // Lobby
-const messageTemplate = document.querySelector("#chat-message-template"); // HTMLTemplateElement
-
-export default function (socket) {
-  socket.on(CHAT_MESSAGE_LOBBY, ({ roomId, message, senderEmail, gravatar, timestamp }) => {
+    const messageArea = document.querySelector(messageAreaName); // HTMLElement
+    const messageTemplate = document.querySelector("#chat-message-template"); // HTMLTemplateElement
     if (messageTemplate === null || messageArea === null) {
       console.error("Chat functionality not configured on this page");
       return;
@@ -45,5 +31,6 @@ export default function (socket) {
 
     messageArea.insertBefore(messageElement, messageArea.firstChild);
     messageArea.scrollTop = messageArea.scrollHeight;
-  });
 }
+
+export { generateMsg }

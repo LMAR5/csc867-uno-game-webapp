@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
-import { GAME_START, GAME_USER_ADDED, GAME_TEST, GAME_USER_DRAW, GAME_AFTER_PLAY, GAME_WINNER, GAME_SKIP_CARD } from "../../backend/sockets/constants";
+import { GAME_START, GAME_USER_ADDED, CHAT_MESSAGE, GAME_TEST, GAME_USER_DRAW, GAME_AFTER_PLAY, GAME_WINNER, GAME_SKIP_CARD } from "../../backend/sockets/constants";
+import { generateMsg } from "../messages/chat-helpers";
 import { addTopDiscardCard, generateNotTurnAlert } from "./gameplay-helpers";
 
 const addPlayerToGameList = (gameId, playerId, playerFirstName, playerLastName, playerCardCount) => {
@@ -113,6 +114,11 @@ const configure = (gameSocketId) => {
     gameSocket.on(GAME_SKIP_CARD, ({ source, msg, gameId, userId }) => {
         console.log({ event: GAME_SKIP_CARD, source, msg, gameId, userId });
         generateNotTurnAlert(msg);
+    });
+
+    gameSocket.on(CHAT_MESSAGE, ({ roomId, message, senderEmail, gravatar, timestamp }) => {
+        console.log('Chat message received');
+        generateMsg(message, senderEmail, gravatar, timestamp, '#chat-message-area');
     });
 }
 
