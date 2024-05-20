@@ -7,9 +7,9 @@
 
 | Feature area | Team member |
 | ------------- | ------------- |
-| Authentication | Kemi Adeibis |
+| Authentication | Kemi Adebisi |
 | Chat Management | Yuquan Xu |
-| Game Management | Luis Aguilar and William Austing Campos |
+| Game Management | Luis Aguilar and William Austin Ocampo |
 | Adapt UI to wireframes | Sungmu Cho |
 
 ## Branch Management
