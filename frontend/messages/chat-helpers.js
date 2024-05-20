@@ -1,39 +1,16 @@
-//import { Socket } from "socket.io-client";
-import { format, render } from "timeago.js";
+// game room
+// lobby
+const generateMsg = (message, senderEmail, gravatar, timestamp, messageArea) => {
 
-import { CHAT_MESSAGE, CHAT_MESSAGE_LOBBY } from "../../backend/sockets/constants";
-
-// export type ChatMessage = {
-//   roomId: string;
-//   message: string;
-//   senderEmail: string;
-//   gravatar: string;
-//   timestamp: number;
-// };
-
-//const messageArea = document.querySelector<HTMLElement>("#chat-message-area");
-//const messageTemplate = document.querySelector<HTMLTemplateElement>("#chat-message-template");
-const messageArea = document.querySelector("#chat-message-area"); // HTMLElement
-const messageAreaLobby = document.querySelector("#chat-message-area-lobby"); // Lobby chat
-const messageTemplate = document.querySelector("#chat-message-template"); // HTMLTemplateElement
-const messageTemplateLobby = document.querySelector("#chat-message-template-lobby"); // Lobby chat 
-
-
-export default function (socket) { // socket, getCurrentRoomId
-  socket.on(CHAT_MESSAGE_LOBBY, ({ roomId, message, senderEmail, gravatar, timestamp }) => {
+    const messageArea = document.querySelector("#chat-message-area"); // HTMLElement
+    const messageAreaLobby = document.querySelector("#chat-message-area-lobby"); // Lobby chat
+    const messageTemplate = document.querySelector("#chat-message-template"); // HTMLTemplateElement
+    const messageTemplateLobby = document.querySelector("#chat-message-template-lobby"); // Lobby chat 
     if (messageTemplate === null || messageArea === null) {
       console.error("Chat functionality not configured on this page");
       return;
     }
 
-    //const currentRoomId = getCurrentRoomId();
-    // Only render messages that belong to the current room.
-    /*
-    if (roomId !== currentRoomId) {
-        console.log(`Received message for room ${roomId}, but the current room is ${currentRoomId}. Message not displayed.`);
-        return;
-    }
-    */
     const messageElement = messageTemplate.content.cloneNode(true); // as HTMLElement;
 
     //const img = messageElement.querySelector<HTMLImageElement>("img"); // HTMLImageElement
@@ -56,5 +33,6 @@ export default function (socket) { // socket, getCurrentRoomId
 
     messageArea.insertBefore(messageElement, messageArea.firstChild);
     messageArea.scrollTop = messageArea.scrollHeight;
-  });
 }
+
+export { generateMsg }

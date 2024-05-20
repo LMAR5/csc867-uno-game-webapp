@@ -1,4 +1,5 @@
 export const CHAT_MESSAGE = "chat:message";
+export const CHAT_MESSAGE_LOBBY = "chat:message_lobby";
 export const GAME_CREATED = "game:created";
 export const GAME_REMOVED = "game:removed";
 export const GAME_START = "game:start";
