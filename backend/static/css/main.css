@@ -1000,6 +1000,11 @@ html,
   background-position-y: -26.45em;
 }
 
+.redRev {
+  background-position-x: -6.4em;
+  background-position-y: -26.45em;
+}
+
 /* Blue cards */
 
 .blue1 {
@@ -1472,6 +1477,10 @@ html,
   height: 100%;
 }
 
+.h-screen {
+  height: 100vh;
+}
+
 .max-h-40 {
   max-height: 10rem;
 }
@@ -1714,6 +1723,11 @@ html,
        column-gap: 1.75rem;
 }
 
+.gap-x-2 {
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem;
+}
+
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -1942,11 +1956,6 @@ html,
   background-color: rgb(255 255 255 / 0.05);
 }
 
-.bg-gray-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-40 {
   --tw-bg-opacity: 0.4;
 }
@@ -2009,12 +2018,12 @@ html,
   padding: 1rem;
 }
 
-.p-2 {
-  padding: 0.5rem;
-}
-
 .p-5 {
   padding: 1.25rem;
+}
+
+.p-1 {
+  padding: 0.25rem;
 }
 
 .px-2 {
@@ -2152,6 +2161,10 @@ html,
 
 .pt-\[10px\] {
   padding-top: 10px;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
 }
 
 .text-left {

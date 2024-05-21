@@ -15,7 +15,7 @@ if (userSocketId) {
 }
 
 const tabs = document.querySelectorAll('[data-tab-target]');
-const activeClass = 'bg-indigo-200';
+const activeClass = 'bg-gray-200';
     
 // Select first tab by default
 if (tabs.length > 0) {
@@ -29,7 +29,7 @@ if (tabs.length > 0) {
             targetContent.classList.remove('hidden');
             
             // Remove active class from all tabs
-            document.querySelectorAll('.bg-indigo-200').forEach(activeTab => activeTab.classList.remove(activeClass));
+            document.querySelectorAll('.bg-gray-200').forEach(activeTab => activeTab.classList.remove(activeClass));
         
             // Add active class to clicked tab
             //console.log(tab)
