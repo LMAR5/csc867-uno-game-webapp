@@ -80,7 +80,7 @@ router.get("/logout", (request, response, next) => {
       if (error) {
         next(error);
       }
-      response.redirect("/auth/login");
+      response.redirect("/");
     });
   });
 });
