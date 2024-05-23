@@ -1,47 +1,46 @@
-
 // Add top card of discard pile to game room
 const addTopDiscardCard = (gameId, cardStyle) => {
-    const gameTopDiscardCard =  "#discard_card_game_".concat(gameId);
-    const discardCard = document.querySelector(gameTopDiscardCard); // HTMLElement
-    if (discardCard === null) {
-        console.error("Discard card not found");
-        return;
-    }
-    discardCard.innerHTML = "";    
-    const newDiv = document.createElement("div");
-    newDiv.className = "uno-card".concat(' ', cardStyle);
-    discardCard.appendChild(newDiv);
-}
+  const gameTopDiscardCard = "#discard_card_game_".concat(gameId);
+  const discardCard = document.querySelector(gameTopDiscardCard); // HTMLElement
+  if (discardCard === null) {
+    console.error("Discard card not found");
+    return;
+  }
+  discardCard.innerHTML = "";
+  const newDiv = document.createElement("div");
+  newDiv.className = "uno-card".concat(" ", cardStyle);
+  discardCard.appendChild(newDiv);
+};
 
 // Add card to list of specific user
 const addCardToList = (gameId, userId, cardId, cardValue, cardStyle, cardName) => {
-    const gameIDListCardsGame =  "#cards_list_game_".concat(gameId);
-    const cardsGameList = document.querySelector(gameIDListCardsGame); // HTMLElement
-    const cardItemListTemplate = document.querySelector("#game_cards_lst_template"); // HTMLTemplateElement
-    if (cardsGameList === null || cardItemListTemplate === null) {
-        console.error("Card list of user not found");
-        return;
-    }
-    const newCardListElement = cardItemListTemplate.content.cloneNode(true); // as HTMLElement;
-    const labelElement = newCardListElement.querySelector("label");
-    //label id: game_1_user_1_card_1_label
-    labelElement.id = "game_".concat(gameId, "_user_", userId, "_card_", cardId, "_label");
-    const inputElement = labelElement.querySelector("input");
-    // input id: game_1_user_1_card_1
-    inputElement.id = "game_".concat(gameId, "_user_", userId, "_card_", cardId);
-    inputElement.value = cardId;
-    inputElement.placeholder = cardName;
-    const spanElement = labelElement.querySelector("span");
-    const cardDivElement = spanElement.querySelector("div");
-    cardDivElement.className = "uno-card".concat(' ', cardStyle);
-    cardsGameList.appendChild(newCardListElement);
-}
+  const gameIDListCardsGame = "#cards_list_game_".concat(gameId);
+  const cardsGameList = document.querySelector(gameIDListCardsGame); // HTMLElement
+  const cardItemListTemplate = document.querySelector("#game_cards_lst_template"); // HTMLTemplateElement
+  if (cardsGameList === null || cardItemListTemplate === null) {
+    console.error("Card list of user not found");
+    return;
+  }
+  const newCardListElement = cardItemListTemplate.content.cloneNode(true); // as HTMLElement;
+  const labelElement = newCardListElement.querySelector("label");
+  //label id: game_1_user_1_card_1_label
+  labelElement.id = "game_".concat(gameId, "_user_", userId, "_card_", cardId, "_label");
+  const inputElement = labelElement.querySelector("input");
+  // input id: game_1_user_1_card_1
+  inputElement.id = "game_".concat(gameId, "_user_", userId, "_card_", cardId);
+  inputElement.value = cardId;
+  inputElement.placeholder = cardName;
+  const spanElement = labelElement.querySelector("span");
+  const cardDivElement = spanElement.querySelector("div");
+  cardDivElement.className = "uno-card".concat(" ", cardStyle);
+  cardsGameList.appendChild(newCardListElement);
+};
 
 // Generate Alert dialog with timer to user (Not your turn, select a card first, etc.)
 const generateNotTurnAlert = (typeMsg) => {
-    const newDiv = document.createElement("div");
-    newDiv.className = `w-full max-w-md bg-blue-700 shadow-[0.8rem_1rem_0.5rem_rgba(0,0,0,0.1)] opacity-100 transition`;    
-    newDiv.innerHTML = `
+  const newDiv = document.createElement("div");
+  newDiv.className = `w-full max-w-md bg-blue-700 shadow-[0.8rem_1rem_0.5rem_rgba(0,0,0,0.1)] opacity-100 transition`;
+  newDiv.innerHTML = `
     <div id="dialog-not-turn" class="relative z-10" role="dialog">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -66,30 +65,29 @@ const generateNotTurnAlert = (typeMsg) => {
         </div>
     </div>
     `;
-    const root = document.getElementById('root');
-    root.appendChild(newDiv);
+  const root = document.getElementById("root");
+  root.appendChild(newDiv);
+  setTimeout(() => {
+    newDiv.classList.remove("opacity-100");
+    newDiv.classList.add("opacity-0");
     setTimeout(() => {
-        newDiv.classList.remove("opacity-100");
-        newDiv.classList.add("opacity-0");
-        setTimeout(() => {
-            newDiv.remove();
-        }, 1000);
-    }, 3000);
-}
+      newDiv.remove();
+    }, 1000);
+  }, 3000);
+};
 
 // Get the input value of the UNO card to show them in the "Selected card" label.
 const getGameRadioValues = () => {
-    const userRadioCards = document.querySelectorAll('input[name="game_radio_values"]');
-    const selectedCard = document.querySelector("span#game_selected_card");
-    if (userRadioCards && selectedCard) {
-        userRadioCards.forEach(radio => {
-            radio.addEventListener('click', function () {
-                radioVal = radio.placeholder;
-                console.log("card value:", radioVal, "card ID:", radio.value);
-                selectedCard.textContent = radioVal;
-            });
-        });
-    }
-}
+  const userRadioCards = document.querySelectorAll('input[name="game_radio_values"]');
+  const selectedCard = document.querySelector("span#game_selected_card");
+  if (userRadioCards && selectedCard) {
+    userRadioCards.forEach((radio) => {
+      radio.addEventListener("click", function () {
+        radioVal = radio.placeholder;
+        selectedCard.textContent = radioVal;
+      });
+    });
+  }
+};
 
 export { addCardToList, generateNotTurnAlert, addTopDiscardCard, getGameRadioValues };

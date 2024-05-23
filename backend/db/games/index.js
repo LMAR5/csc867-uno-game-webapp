@@ -251,8 +251,7 @@ const isGameInitialized = async (gameId) => {
   }  
 }
 
-const updateGameCurrentTurn = async (idx, gameId, userId) => {
-  console.log("UPD current turn", idx);
+const updateGameCurrentTurn = async (gameId, userId) => {  
   const currentTurn = await getUserTurnInGame(gameId, userId);
     // Validate if next turn exists, else assign 1
     const turnExists = await db.oneOrNone(Sql.VALIDATE_NEW_TURN_ORDER, [gameId, currentTurn.turn_order+1]);    

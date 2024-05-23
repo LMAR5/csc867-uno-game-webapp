@@ -1,15 +1,20 @@
 <%- include('../layout/header', { suppressHeader: true }) %>
 <div class="flex flex-row">
-  <h1 class="text-3xl font-bold mr-2"><%= description %></h1>    
+  <h1 class="text-3xl font-bold mr-2"><%= description %></h1>
   <div class="content-center">
-    <h3>(
-      <span id="num_joined_players_game_<%= id %>">
-        <%= count %> 
-      </span>
-      / <%= number_players %> players )</h3>
+    <h3>
+      (
+      <span id="num_joined_players_game_<%= id %>"> <%= count %> </span>
+      /
+      <%= number_players %>
+      players )
+    </h3>
   </div>
   <div class="content-center ml-3">
-    <span id="current_status_game_<%= id %>" class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+    <span
+      id="current_status_game_<%= id %>"
+      class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
+    >
       <%= status %>
     </span>
   </div>
@@ -20,7 +25,8 @@
       <%- include("user-listing") %>
       <div class="float-right">
         Current turn:
-        <span id="current_turn_game_<%= id %>"
+        <span
+          id="current_turn_game_<%= id %>"
           class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10"
         >
           <%= user_turn[0].first_name.concat(' ',user_turn[0].last_name) %>
@@ -32,24 +38,43 @@
         <div class="uno-card W downCard mr-2"></div>
         <div id="discard_card_game_<%= id %>">
           <% if (first_discard) { %>
-            <div class="uno-card <%= first_discard.style %>"></div>
+          <div class="uno-card <%= first_discard.style %>"></div>
           <% } %>
-        </div>        
+        </div>
       </div>
     </div>
     <form method="post" id="player-form" class="flex flex-col my-4">
       <div class="flex flex-row">
         <h2 class="text-2xl font-bold mr-2">Your cards</h2>
-        <button id="game_play_btn" type="submit" formaction="/games/<%= id %>/play" class="rounded-md bg-sky-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 mr-2">
+        <button
+          id="game_play_btn"
+          type="submit"
+          formaction="/games/<%= id %>/play"
+          class="rounded-md bg-sky-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 mr-2"
+        >
           Play
         </button>
-        <button id="game_draw_btn" type="submit" formaction="/games/<%= id %>/draw" class="rounded-md bg-red-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 mr-2">
+        <button
+          id="game_draw_btn"
+          type="submit"
+          formaction="/games/<%= id %>/draw"
+          class="rounded-md bg-red-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 mr-2"
+        >
           Draw
         </button>
-        <button id="game_reset_btn" type="reset" class="rounded-md bg-slate-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 mr-2">
+        <button
+          id="game_reset_btn"
+          type="reset"
+          class="rounded-md bg-slate-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 mr-2"
+        >
           Reset
         </button>
-        <button id="game_test_btn" type="submit" formaction="/games/<%= id %>/test" class="rounded-md bg-green-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 mr-2">
+        <button
+          id="game_test_btn"
+          type="submit"
+          formaction="/games/<%= id %>/test"
+          class="rounded-md bg-green-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 mr-2"
+        >
           Test
         </button>
         <div class="content-center ml-3">
@@ -58,9 +83,7 @@
       </div>
       <fieldset class="mt-4">
         <div class="flex flex-row">
-          <div class="basis-2/3">
-            <%- include("card-listing") %>
-          </div>
+          <div class="basis-2/3"><%- include("card-listing") %></div>
         </div>
       </fieldset>
     </form>
