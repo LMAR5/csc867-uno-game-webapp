@@ -36,29 +36,24 @@ Chat management
 | Database  | PostgreSQL |
 | Project Management | GitHub Projects |
 
-## Main dependencies used within the application
+## Main app dependencies used within the application
 
-### bcrypt
-NodeJS library used for password hashing
-### Express
-NodeJS framework for building RESTful APIs
-### EJS
-Template engine library for NodeJS that allows you to generate HTML markup with plain JavaScript
-### Socket IO
-Event-driven library for real-time web apps. It enables real-time, bi-directional communication between web clients and servers.
-### Postgres migrations (node-pg-migrate)
-PostgreSQL database migration management tool. Manage migrations with CLI support for up-down migrations, ensuring smooth database transitions.
+| Dependency  | Description |
+| ------------- | ------------- |
+| `bcrypt`  | NodeJS library used for password hashing |
+| `Express` | NodeJS framework for building RESTful APIs |
+| `EJS` | Template engine library for NodeJS that allows you to generate HTML markup with plain JavaScript |
+| `Socket IO` | Event-driven library for real-time web apps. It enables real-time, bi-directional communication between web clients and servers. |
+| `Postgres migrations (node-pg-migrate)` | PostgreSQL database migration management tool. Manage migrations with CLI support for up-down migrations, ensuring smooth database transitions. |
 
-## Developer dependencies used within the application
+## Main developer dependencies used within the application
 
-### Prettier
-Opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
-### Tailwind CSS
-A utility-first CSS framework
-### ESBuild
-Free and open-source module bundler and minifier for JavaScript and CSS
-### Husky
-Ultra-fast modern native git hooks
+| Dependency  | Description |
+| ------------- | ------------- |
+| `Prettier` | Opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary. |
+| `Tailwind CSS` | A utility-first CSS framework |
+| `ESBuild` | Free and open-source module bundler and minifier for JavaScript and CSS |
+| `Husky` | Ultra-fast modern native git hooks |
 
 ## Wireframes
 
