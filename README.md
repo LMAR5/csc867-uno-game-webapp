@@ -1,7 +1,10 @@
-# Uno Web App
+# UNO Multiplayer
 
-Server-side rendering web app that allows users to play the real time multiplayer online game UNO.
-With its user-friendly interface, the app enables users to create game session to play Uno with a number of players you define. Play UNO in multiple game sessions at the same time and send messages to your friends.
+Server-side rendering web application that allows users to play the real-time multiplayer online game UNO.
+With its user-friendly interface, the application enables users to create game session to play with a number of players you choose. Play UNO in multiple game sessions at the same time and send messages to your friends.
+
+![Landing](screenshots/Landing.jpg)
+![NumPlayersComplete](screenshots/PlayersComplete.jpg)
 
 Some of the features UNO Web App offers are the following:
 Authentication
@@ -104,55 +107,55 @@ npm run start:dev
 
 ### Landing page
 
-![Landing](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/Landing.jpg)
+![Landing](screenshots/Landing.jpg)
 
 ### Sign-up
 User needs to create an account providing its firstname, lastname, email, and password
 Stored passwords are encrypted using bcrypt, a cryptographic hashing function.
 
-![SignUp](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/SignUp.jpg)
+![SignUp](screenshots/SignUp.jpg)
 
 ### Sign-in
 User access the app by providing its email and password.
 
-![SignIn](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/SignIn.jpg)
+![SignIn](screenshots/SignIn.jpg)
 
 If provided credentials doesn't exist, app displays error message.
 
-![SignIn](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/SignInError.jpg)
+![SignIn](screenshots/SignInError.jpg)
 
 ### Main Lobby
 Lobby where users will see all available game sessions they can join and current session they are part of.
 
-![MainLobby](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/MainLobby.jpg)
-![MainLobbyCurrent](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/MainLobbyCurr.jpg)
+![MainLobby](screenshots/MainLobby.jpg)
+![MainLobbyCurrent](screenshots/MainLobbyCurr.jpg)
 
 ### Create a game session
 To create a game session the user must provide a name and the number of players for the game.
 
-![CreateGame](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/CreateGame.jpg)
+![CreateGame](screenshots/CreateGame.jpg)
 
 ### Game room
 If number of players is not completed yet, user will see a UNO card facing down waiting for other players.
 
-![NumPlayersNotComplete](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/PlayersNotComplete.jpg)
+![NumPlayersNotComplete](screenshots/PlayersNotComplete.jpg)
 
 If number of players is completed, the app assigns 7 UNO cards to each player randomly.
 
-![NumPlayersComplete](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/PlayersComplete.jpg)
+![NumPlayersComplete](screenshots/PlayersComplete.jpg)
 
 The app validates each play against UNO rules (same color/number/symbol, special cards, etc) and displays error messages for invalid plays or when it's not the user's turn
 
-![ValidationMessage](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/ValidationMessage.jpg)
-![NotUserTurn](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/NotUserTurn.jpg)
+![ValidationMessage](screenshots/ValidationMessage.jpg)
+![NotUserTurn](screenshots/NotUserTurn.jpg)
 
 ### Winner page
 If a user wins a game session (has 0 cards on hand) the app redirects all players to the game end page, displaying the winner of the game
 
-![WinnerPage](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/WinnerPage.jpg)
+![WinnerPage](screenshots/WinnerPage.jpg)
 
 ### Chat
 Send messages to everybody in the lobby and in specific game rooms
 
-![LobbyChat](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/LobbyChat.jpg)
-![GameSessionChat](https://github.com/LMAR5/csc867-uno-game-webapp/blob/master/screenshots/GameSessionChat.jpg)
+![LobbyChat](screenshots/LobbyChat.jpg)
+![GameSessionChat](screenshots/GameSessionChat.jpg)
